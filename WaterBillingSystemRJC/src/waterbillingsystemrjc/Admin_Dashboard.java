@@ -1,16 +1,17 @@
 package waterbillingsystemrjc;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.sql.SQLException;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;  // For parsing date strings
-import java.util.Date; 
+import java.util.Vector;
+
+
+
 
 
 public class Admin_Dashboard extends javax.swing.JFrame {
@@ -18,10 +19,15 @@ public class Admin_Dashboard extends javax.swing.JFrame {
     public Admin_Dashboard() {
         initComponents();
         Connect();
+        fetchClientInfo();
+        calculateBaseCharge();
+        
+
     }
     
     Connection con;
     PreparedStatement pst;
+    ResultSet rs = null;
     
     public String generateNextAccountNo(Connection con) throws SQLException {
     String lastAccountNo = null;
@@ -62,6 +68,121 @@ public class Admin_Dashboard extends javax.swing.JFrame {
         } 
     }
     
+   private int generateNextMeterNo(Connection con) throws SQLException {
+    Statement stmt = con.createStatement();
+    ResultSet rs = stmt.executeQuery("SELECT MAX(Meter_No) FROM clientinfo");
+    if (rs.next()) {
+        String maxMeterNo = rs.getString(1); 
+        if (maxMeterNo != null) {
+            String[] parts = maxMeterNo.split("-");
+            return Integer.parseInt(parts[1]) + 1; 
+        }
+    }
+    return 1; 
+}
+   private void fetchClientInfo() {
+    try {
+        
+        if (con == null || con.isClosed()) {
+            JOptionPane.showMessageDialog(this, "Database connection is not established.");
+            return;
+        }
+
+        pst = con.prepareStatement("SELECT * FROM clientinfo");
+        rs = pst.executeQuery();
+
+        ResultSetMetaData rss = rs.getMetaData();
+        int columnCount = rss.getColumnCount();
+
+        DefaultTableModel df = (DefaultTableModel) CustomerInfoTable.getModel();
+        df.setRowCount(0); 
+
+        while (rs.next()) {
+            Vector<Object> v2 = new Vector<>();
+
+            v2.add(rs.getString("Account_No"));   
+            v2.add(rs.getString("Account_Name")); 
+            v2.add(rs.getString("Service_Address")); 
+            v2.add(rs.getString("Contact_Number"));  
+            v2.add(rs.getString("Property"));     
+            v2.add(rs.getString("Meter_No"));      
+            v2.add(rs.getString("Account_Status")); 
+
+            df.addRow(v2);
+        }
+
+    } catch (SQLException ex) {
+
+        Logger.getLogger(Admin_Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, "Error fetching data: " + ex.getMessage());
+    } catch (Exception ex) {
+
+        Logger.getLogger(Admin_Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, "Unexpected error: " + ex.getMessage());
+    }
+}
+   private void syncAccountNumbers(String accountNo, String accountName, String meterNo) {
+    
+    SIAccountNoTF.setText(accountNo);  
+    MRAccountNoTF.setText(accountNo); 
+    BDAccountNoTF.setText(accountNo); 
+    BSAccountNoTF.setText(accountNo);  
+
+   
+    SIAccountNameTF.setText(accountName); 
+    MRAccountNameTF.setText(accountName); 
+    BDAccountNameTF.setText(accountName);  
+    BSAccountNameTF.setText(accountName); 
+
+    SIMeterNoTF.setText(meterNo); 
+    MRMeterNoTF.setText(meterNo); 
+
+    
+    SIAccountNoTF.setEditable(false);  
+    MRAccountNoTF.setEditable(false); 
+    BDAccountNoTF.setEditable(false); 
+    BSAccountNoTF.setEditable(false);  
+
+    
+    SIAccountNameTF.setEditable(true);  
+    MRAccountNameTF.setEditable(false);
+    BDAccountNameTF.setEditable(false); 
+    BSAccountNameTF.setEditable(false); 
+
+    
+    SIMeterNoTF.setEditable(false);  
+    MRMeterNoTF.setEditable(false);  
+
+    
+    BaseChargeTF.setEditable(false);  
+    BDRateTF.setEditable(true);       
+    BDConsumptionTF.setEditable(true); 
+}
+   private void calculateBaseCharge() {
+    try {
+        
+        if (BDConsumptionTF.getText().trim().isEmpty() || BDRateTF.getText().trim().isEmpty()) {
+            return; 
+        }
+
+      
+        BigDecimal consumption = new BigDecimal(BDConsumptionTF.getText().trim());
+        BigDecimal rate = new BigDecimal(BDRateTF.getText().trim());
+
+      
+        BigDecimal baseCharge = consumption.multiply(rate);
+
+        
+        BaseChargeTF.setText(baseCharge.setScale(2, RoundingMode.HALF_UP).toString());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid numeric values.", 
+                                      "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+
+   
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -75,102 +196,71 @@ public class Admin_Dashboard extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        AccountNoTF = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
+        SIAccountNoTF = new javax.swing.JTextField();
         CreateBT = new javax.swing.JButton();
-        AccountNameTF = new javax.swing.JTextField();
-        PreviousConsumptionTF = new javax.swing.JTextField();
-        CurrentConsumptionTF = new javax.swing.JTextField();
-        BillingPeriodStartTF = new javax.swing.JTextField();
-        CurrentChargeTF = new javax.swing.JTextField();
-        DueDateTF = new javax.swing.JTextField();
-        TotalAmountDueTF = new javax.swing.JTextField();
-        ReadBT = new javax.swing.JButton();
+        SIAccountNameTF = new javax.swing.JTextField();
+        SearchBT = new javax.swing.JButton();
         UpdateBT = new javax.swing.JButton();
         DeleteBT = new javax.swing.JButton();
-        MeterCB = new javax.swing.JComboBox<>();
         PropertyCB = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         ServiceAddressTF = new javax.swing.JTextArea();
         jLabel32 = new javax.swing.JLabel();
         jLabel33 = new javax.swing.JLabel();
         AccountStatusCB = new javax.swing.JComboBox<>();
-        ReadingDateTF = new javax.swing.JTextField();
+        SIMeterNoTF = new javax.swing.JTextField();
         jPanel12 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         CustomerInfoTable = new javax.swing.JTable();
         jLabel34 = new javax.swing.JLabel();
-        Contact_NumberTF = new javax.swing.JTextField();
-        jLabel35 = new javax.swing.JLabel();
-        BillingPeriodEndTF = new javax.swing.JTextField();
+        ContactNumberTF = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel39 = new javax.swing.JLabel();
-        jLabel41 = new javax.swing.JLabel();
-        jTextField13 = new javax.swing.JTextField();
-        jTextField14 = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jPanel6 = new javax.swing.JPanel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        jPanel5 = new javax.swing.JPanel();
-        jTabbedPane2 = new javax.swing.JTabbedPane();
-        jPanel11 = new javax.swing.JPanel();
-        jLabel29 = new javax.swing.JLabel();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel25 = new javax.swing.JLabel();
-        jLabel26 = new javax.swing.JLabel();
-        jLabel27 = new javax.swing.JLabel();
-        jLabel28 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jPanel1 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        MRAccountNoTF = new javax.swing.JTextField();
+        MRRateTF = new javax.swing.JTextField();
+        jLabel36 = new javax.swing.JLabel();
+        MRAccountNameTF = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        ReadingDateTextField = new javax.swing.JTextField();
-        AccountNameTextField = new javax.swing.JTextField();
-        CurrentConsumptionTextField = new javax.swing.JTextField();
-        jLabel19 = new javax.swing.JLabel();
-        jLabel20 = new javax.swing.JLabel();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        PreviousConsumptionTextField = new javax.swing.JTextField();
-        CurrentChargeTextField = new javax.swing.JTextField();
-        TotalAmountTextField = new javax.swing.JTextField();
-        DueDateTextField = new javax.swing.JTextField();
-        StatusTextField = new javax.swing.JTextField();
-        FinishPaymentbtn = new javax.swing.JButton();
-        jLabel36 = new javax.swing.JLabel();
-        jTextField10 = new javax.swing.JTextField();
-        jPanel10 = new javax.swing.JPanel();
-        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        ApprovedByTF = new javax.swing.JTextField();
-        TotalAmountTF = new javax.swing.JTextField();
-        ClientTF = new javax.swing.JTextField();
-        FinalApprovalTF = new javax.swing.JTextField();
-        jLabel37 = new javax.swing.JLabel();
-        StatusTF = new javax.swing.JTextField();
-        jLabel38 = new javax.swing.JLabel();
-        jPanel9 = new javax.swing.JPanel();
-        jLabel18 = new javax.swing.JLabel();
-        jTextField12 = new javax.swing.JTextField();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
-        jLabel31 = new javax.swing.JLabel();
+        MRMeterNoTF = new javax.swing.JTextField();
+        MRConsumptionTF = new javax.swing.JTextField();
+        MRPreviousReadingTF = new javax.swing.JTextField();
+        MRCurrentReadingTF = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel39 = new javax.swing.JLabel();
+        BDAccountNoTF = new javax.swing.JTextField();
+        BDAccountNameTF = new javax.swing.JTextField();
+        jLabel40 = new javax.swing.JLabel();
+        jLabel41 = new javax.swing.JLabel();
+        BDPreviousReadingTf = new javax.swing.JTextField();
+        BDCurrentReadingTF = new javax.swing.JTextField();
+        jLabel42 = new javax.swing.JLabel();
+        jLabel43 = new javax.swing.JLabel();
+        BDConsumptionTF = new javax.swing.JTextField();
+        BDRateTF = new javax.swing.JTextField();
+        jLabel44 = new javax.swing.JLabel();
+        jLabel45 = new javax.swing.JLabel();
+        BaseChargeTF = new javax.swing.JTextField();
+        jLabel47 = new javax.swing.JLabel();
+        TotalChargeTF = new javax.swing.JTextField();
+        DueDateTF = new javax.swing.JTextField();
+        jLabel50 = new javax.swing.JLabel();
+        TaxAmountTF = new javax.swing.JTextField();
+        jLabel56 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel51 = new javax.swing.JLabel();
+        BSAccountNoTF = new javax.swing.JTextField();
+        BSAccountNameTF = new javax.swing.JTextField();
+        jLabel52 = new javax.swing.JLabel();
+        jLabel53 = new javax.swing.JLabel();
+        BillingPeriodStartTF = new javax.swing.JTextField();
+        BillingPeriodEndTF = new javax.swing.JTextField();
+        jLabel54 = new javax.swing.JLabel();
+        jLabel55 = new javax.swing.JLabel();
+        BSAmountDue = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -193,14 +283,14 @@ public class Admin_Dashboard extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(228, 228, 228)
                 .addComponent(jLabel30)
-                .addContainerGap(546, Short.MAX_VALUE))
+                .addContainerGap(585, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(191, 191, 191)
                 .addComponent(jLabel30)
-                .addContainerGap(527, Short.MAX_VALUE))
+                .addContainerGap(515, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", jPanel8);
@@ -209,55 +299,27 @@ public class Admin_Dashboard extends javax.swing.JFrame {
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel3.setText("Account No.");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, 27));
+        jLabel3.setText("Account No. :");
+        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 60, -1, 27));
 
         jLabel4.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel4.setText("Account Name:");
-        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 70, -1, -1));
+        jLabel4.setText("Account Name :");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 130, -1, -1));
 
         jLabel9.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel9.setText("Service Address:");
-        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, -1, -1));
+        jLabel9.setText("Service Address :");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 190, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
         jLabel10.setText("Property:");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 250, -1, -1));
+        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 80, -1, -1));
 
-        jLabel11.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel11.setText("Meter:");
-        jPanel2.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 300, -1, -1));
-
-        jLabel12.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel12.setText("Previous Consumption:");
-        jPanel2.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 30, -1, -1));
-
-        jLabel13.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel13.setText("Current Consumption;");
-        jPanel2.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 80, -1, -1));
-
-        jLabel14.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel14.setText("Due Date:");
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 260, -1, 13));
-
-        jLabel15.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel15.setText("Billing Period Start:");
-        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 170, -1, -1));
-
-        jLabel17.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel17.setText("Current Charge:");
-        jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 130, -1, -1));
-
-        AccountNoTF.addActionListener(new java.awt.event.ActionListener() {
+        SIAccountNoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AccountNoTFActionPerformed(evt);
+                SIAccountNoTFActionPerformed(evt);
             }
         });
-        jPanel2.add(AccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 20, 312, 33));
-
-        jLabel16.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel16.setText("Total Amount Due:");
-        jPanel2.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 310, -1, -1));
+        jPanel2.add(SIAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, 312, 40));
 
         CreateBT.setText("CREATE");
         CreateBT.addActionListener(new java.awt.event.ActionListener() {
@@ -265,64 +327,22 @@ public class Admin_Dashboard extends javax.swing.JFrame {
                 CreateBTActionPerformed(evt);
             }
         });
-        jPanel2.add(CreateBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(59, 341, 87, 44));
+        jPanel2.add(CreateBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 310, 87, 44));
 
-        AccountNameTF.addActionListener(new java.awt.event.ActionListener() {
+        SIAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AccountNameTFActionPerformed(evt);
+                SIAccountNameTFActionPerformed(evt);
             }
         });
-        jPanel2.add(AccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 60, 312, 33));
+        jPanel2.add(SIAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 312, 40));
 
-        PreviousConsumptionTF.addActionListener(new java.awt.event.ActionListener() {
+        SearchBT.setText("SEARCH");
+        SearchBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PreviousConsumptionTFActionPerformed(evt);
+                SearchBTActionPerformed(evt);
             }
         });
-        jPanel2.add(PreviousConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 30, 300, 33));
-
-        CurrentConsumptionTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CurrentConsumptionTFActionPerformed(evt);
-            }
-        });
-        jPanel2.add(CurrentConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 70, 300, 33));
-
-        BillingPeriodStartTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BillingPeriodStartTFActionPerformed(evt);
-            }
-        });
-        jPanel2.add(BillingPeriodStartTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 170, 300, 30));
-
-        CurrentChargeTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CurrentChargeTFActionPerformed(evt);
-            }
-        });
-        jPanel2.add(CurrentChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 120, 300, 33));
-
-        DueDateTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DueDateTFActionPerformed(evt);
-            }
-        });
-        jPanel2.add(DueDateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 260, 300, 33));
-
-        TotalAmountDueTF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TotalAmountDueTFActionPerformed(evt);
-            }
-        });
-        jPanel2.add(TotalAmountDueTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 310, 300, 33));
-
-        ReadBT.setText("READ");
-        ReadBT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ReadBTActionPerformed(evt);
-            }
-        });
-        jPanel2.add(ReadBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 92, 44));
+        jPanel2.add(SearchBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, 92, 44));
 
         UpdateBT.setText("UPDATE");
         UpdateBT.addActionListener(new java.awt.event.ActionListener() {
@@ -330,100 +350,112 @@ public class Admin_Dashboard extends javax.swing.JFrame {
                 UpdateBTActionPerformed(evt);
             }
         });
-        jPanel2.add(UpdateBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 340, 92, 44));
+        jPanel2.add(UpdateBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 310, 92, 44));
 
         DeleteBT.setText("DELETE");
-        jPanel2.add(DeleteBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 340, 92, 44));
-
-        MeterCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20" }));
-        jPanel2.add(MeterCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 111, 32));
+        DeleteBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DeleteBTActionPerformed(evt);
+            }
+        });
+        jPanel2.add(DeleteBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 310, 92, 44));
 
         PropertyCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Residential", "Commercial", "Industrial", "Institutional" }));
-        jPanel2.add(PropertyCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 240, 111, 32));
+        PropertyCB.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PropertyCBActionPerformed(evt);
+            }
+        });
+        jPanel2.add(PropertyCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 70, 200, 40));
 
         ServiceAddressTF.setColumns(20);
         ServiceAddressTF.setRows(5);
         jScrollPane2.setViewportView(ServiceAddressTF);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 110, 312, 33));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 170, 312, 40));
 
         jLabel32.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel32.setText("Reading Date :");
-        jPanel2.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 300, -1, -1));
+        jLabel32.setText("Meter No. :");
+        jPanel2.add(jLabel32, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 140, -1, -1));
 
         jLabel33.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
         jLabel33.setText("Account Status :");
-        jPanel2.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 250, -1, -1));
+        jPanel2.add(jLabel33, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 200, -1, -1));
 
         AccountStatusCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
-        jPanel2.add(AccountStatusCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 240, 100, 36));
-
-        ReadingDateTF.addActionListener(new java.awt.event.ActionListener() {
+        AccountStatusCB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ReadingDateTFActionPerformed(evt);
+                AccountStatusCBActionPerformed(evt);
             }
         });
-        jPanel2.add(ReadingDateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 290, 99, 31));
+        jPanel2.add(AccountStatusCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 190, 200, 40));
+
+        SIMeterNoTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SIMeterNoTFActionPerformed(evt);
+            }
+        });
+        jPanel2.add(SIMeterNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 130, 200, 40));
 
         CustomerInfoTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Account Number", "Account Name", "Service Address", "Contact Number", "Property", "Meter", "Account Status", "Previous Consumption", "resent Consumption", "Current Change", "Billing Period_Start", "Billing Period End", "Due Date", "Reading Date", "Total Amount Due"
+                "Account Number", "Account Name", "Service Address", "Contact Number", "Property", "Meter No", "Account Status"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -439,14 +471,6 @@ public class Admin_Dashboard extends javax.swing.JFrame {
             CustomerInfoTable.getColumnModel().getColumn(4).setResizable(false);
             CustomerInfoTable.getColumnModel().getColumn(5).setResizable(false);
             CustomerInfoTable.getColumnModel().getColumn(6).setResizable(false);
-            CustomerInfoTable.getColumnModel().getColumn(7).setResizable(false);
-            CustomerInfoTable.getColumnModel().getColumn(8).setResizable(false);
-            CustomerInfoTable.getColumnModel().getColumn(9).setResizable(false);
-            CustomerInfoTable.getColumnModel().getColumn(10).setResizable(false);
-            CustomerInfoTable.getColumnModel().getColumn(11).setResizable(false);
-            CustomerInfoTable.getColumnModel().getColumn(12).setResizable(false);
-            CustomerInfoTable.getColumnModel().getColumn(13).setResizable(false);
-            CustomerInfoTable.getColumnModel().getColumn(14).setResizable(false);
         }
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
@@ -457,623 +481,302 @@ public class Admin_Dashboard extends javax.swing.JFrame {
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 2, Short.MAX_VALUE))
         );
 
-        jPanel2.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 1100, 290));
+        jPanel2.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 1100, 250));
 
         jLabel34.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel34.setText("Contact Number:");
-        jPanel2.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 170, 130, -1));
+        jLabel34.setText("Contact Number :");
+        jPanel2.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 250, 130, -1));
 
-        Contact_NumberTF.addActionListener(new java.awt.event.ActionListener() {
+        ContactNumberTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Contact_NumberTFActionPerformed(evt);
+                ContactNumberTFActionPerformed(evt);
             }
         });
-        jPanel2.add(Contact_NumberTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 160, 310, 40));
+        jPanel2.add(ContactNumberTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 310, 40));
 
-        jLabel35.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
-        jLabel35.setText("Billing Period End:");
-        jPanel2.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 220, -1, -1));
+        jTabbedPane1.addTab("SERVICE INFORMATION", jPanel2);
+
+        jPanel7.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel5.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel5.setText("Account No. :");
+        jPanel7.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, 27));
+
+        MRAccountNoTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MRAccountNoTFActionPerformed(evt);
+            }
+        });
+        jPanel7.add(MRAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 60, 312, 40));
+
+        MRRateTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MRRateTFActionPerformed(evt);
+            }
+        });
+        jPanel7.add(MRRateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 440, 310, 40));
+
+        jLabel36.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel36.setText("Meter No. :");
+        jPanel7.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, -1, -1));
+
+        MRAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MRAccountNameTFActionPerformed(evt);
+            }
+        });
+        jPanel7.add(MRAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, 312, 40));
+
+        jLabel6.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel6.setText("Account Name :");
+        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, -1, -1));
+
+        jLabel1.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel1.setText("Consumption :");
+        jPanel7.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 390, -1, -1));
+
+        jLabel2.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel2.setText("Previous Reading :");
+        jPanel7.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel7.setText("Current Reading :");
+        jPanel7.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel8.setText("Rate :");
+        jPanel7.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 450, -1, -1));
+
+        MRMeterNoTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MRMeterNoTFActionPerformed(evt);
+            }
+        });
+        jPanel7.add(MRMeterNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 310, 40));
+
+        MRConsumptionTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MRConsumptionTFActionPerformed(evt);
+            }
+        });
+        jPanel7.add(MRConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 370, 310, 40));
+
+        MRPreviousReadingTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MRPreviousReadingTFActionPerformed(evt);
+            }
+        });
+        jPanel7.add(MRPreviousReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 250, 310, 40));
+
+        MRCurrentReadingTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MRCurrentReadingTFActionPerformed(evt);
+            }
+        });
+        jPanel7.add(MRCurrentReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 310, 40));
+
+        jTabbedPane1.addTab("METER READING", jPanel7);
+
+        jPanel5.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel39.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel39.setText("Account No. :");
+        jPanel5.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, -1, 27));
+
+        BDAccountNoTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BDAccountNoTFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(BDAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 312, 30));
+
+        BDAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BDAccountNameTFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(BDAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 312, 30));
+
+        jLabel40.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel40.setText("Account Name :");
+        jPanel5.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, -1, -1));
+
+        jLabel41.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel41.setText("Previous Reading :");
+        jPanel5.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, 27));
+
+        BDPreviousReadingTf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BDPreviousReadingTfActionPerformed(evt);
+            }
+        });
+        jPanel5.add(BDPreviousReadingTf, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 312, 30));
+
+        BDCurrentReadingTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BDCurrentReadingTFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(BDCurrentReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 312, 30));
+
+        jLabel42.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel42.setText("Current Reading :");
+        jPanel5.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, -1, -1));
+
+        jLabel43.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel43.setText("Consumption :");
+        jPanel5.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, -1, 27));
+
+        BDConsumptionTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BDConsumptionTFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(BDConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 312, 30));
+
+        BDRateTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BDRateTFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(BDRateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 230, 312, 30));
+
+        jLabel44.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel44.setText("Rate :");
+        jPanel5.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, -1, -1));
+
+        jLabel45.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel45.setText("Base Charge :");
+        jPanel5.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, -1, 27));
+
+        BaseChargeTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BaseChargeTFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(BaseChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 312, 30));
+
+        jLabel47.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel47.setText("Total Charge :");
+        jPanel5.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 350, -1, 27));
+
+        TotalChargeTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TotalChargeTFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(TotalChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 312, 30));
+
+        DueDateTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DueDateTFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(DueDateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 390, 312, 30));
+
+        jLabel50.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel50.setText("Due Date:");
+        jPanel5.add(jLabel50, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, -1, -1));
+
+        TaxAmountTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TaxAmountTFActionPerformed(evt);
+            }
+        });
+        jPanel5.add(TaxAmountTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 312, 30));
+
+        jLabel56.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel56.setText("Tax :");
+        jPanel5.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, -1));
+
+        jTabbedPane1.addTab("BILLING DETAILS", jPanel5);
+
+        jPanel6.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel51.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel51.setText("Account No. :");
+        jPanel6.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, -1, 27));
+
+        BSAccountNoTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BSAccountNoTFActionPerformed(evt);
+            }
+        });
+        jPanel6.add(BSAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 312, 30));
+
+        BSAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BSAccountNameTFActionPerformed(evt);
+            }
+        });
+        jPanel6.add(BSAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, 312, 30));
+
+        jLabel52.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel52.setText("Account Name :");
+        jPanel6.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, -1, -1));
+
+        jLabel53.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel53.setText("Billing Period Start :");
+        jPanel6.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, 27));
+
+        BillingPeriodStartTF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BillingPeriodStartTFActionPerformed(evt);
+            }
+        });
+        jPanel6.add(BillingPeriodStartTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 312, 30));
 
         BillingPeriodEndTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BillingPeriodEndTFActionPerformed(evt);
             }
         });
-        jPanel2.add(BillingPeriodEndTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 220, 300, 30));
+        jPanel6.add(BillingPeriodEndTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 312, 30));
 
-        jTabbedPane1.addTab("Customer Management", jPanel2);
+        jLabel54.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel54.setText("Billing Period End :");
+        jPanel6.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, -1, -1));
 
-        jPanel7.setBackground(new java.awt.Color(153, 255, 255));
+        jLabel55.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel55.setText("Total Amount Due :");
+        jPanel6.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, -1, 27));
 
-        jLabel7.setText("Service Interruption Reports");
-
-        jLabel39.setText("Alert and Notification");
-
-        jLabel41.setText("Address");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Address", "Service Interruption Report", "Alerts and Notification", "Clients Feedbacks"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane5.setViewportView(jTable3);
-        if (jTable3.getColumnModel().getColumnCount() > 0) {
-            jTable3.getColumnModel().getColumn(0).setResizable(false);
-            jTable3.getColumnModel().getColumn(1).setResizable(false);
-        }
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 621, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.DEFAULT_SIZE, 342, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                                .addComponent(jLabel41)
-                                .addGap(63, 63, 63)))
-                        .addGap(12, 12, 12)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel7Layout.createSequentialGroup()
-                                .addGap(57, 57, 57)
-                                .addComponent(jLabel39)))))
-                .addGap(501, 501, 501))
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel39)
-                    .addComponent(jLabel41))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(250, Short.MAX_VALUE))
-        );
-
-        jTabbedPane1.addTab("Customer Water Usage Reports", jPanel7);
-
-        jPanel5.setBackground(new java.awt.Color(153, 255, 255));
-
-        jTabbedPane2.setBackground(new java.awt.Color(204, 255, 255));
-        jTabbedPane2.setTabPlacement(javax.swing.JTabbedPane.LEFT);
-        jTabbedPane2.setFont(new java.awt.Font("Franklin Gothic Heavy", 0, 12)); // NOI18N
-
-        jPanel11.setBackground(new java.awt.Color(204, 255, 255));
-
-        jLabel29.setFont(new java.awt.Font("Cooper Black", 0, 36)); // NOI18N
-        jLabel29.setText("BILLING MANAGEMENT");
-
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createSequentialGroup()
-                .addGap(170, 170, 170)
-                .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel11Layout.createSequentialGroup()
-                .addGap(205, 205, 205)
-                .addComponent(jLabel29)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("", jPanel11);
-
-        jPanel4.setBackground(new java.awt.Color(204, 255, 255));
-
-        jLabel25.setText("Meter Reading & Calculation");
-
-        jLabel26.setText("Rate Structure");
-
-        jLabel27.setText("Usage Alerts");
-
-        jLabel28.setText("Data Validation & Error Handling");
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel25)
-                    .addComponent(jLabel26)
-                    .addComponent(jLabel27)
-                    .addComponent(jLabel28))
-                .addGap(36, 36, 36)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField5)
-                    .addComponent(jTextField6)
-                    .addComponent(jTextField7)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel25)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(53, 53, 53)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel26)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(51, 51, 51)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel27)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(46, 46, 46)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel28)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("Usage Information", jPanel4);
-
-        jPanel1.setBackground(new java.awt.Color(204, 255, 255));
-
-        jLabel1.setText("Total Amount:");
-
-        jLabel2.setText("Due Date:");
-
-        ReadingDateTextField.addActionListener(new java.awt.event.ActionListener() {
+        BSAmountDue.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ReadingDateTextFieldActionPerformed(evt);
+                BSAmountDueActionPerformed(evt);
             }
         });
+        jPanel6.add(BSAmountDue, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, 312, 30));
 
-        AccountNameTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AccountNameTextFieldActionPerformed(evt);
-            }
-        });
-
-        CurrentConsumptionTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CurrentConsumptionTextFieldActionPerformed(evt);
-            }
-        });
-
-        jLabel19.setText("Reading Date:");
-
-        jLabel20.setText("Current Consumption:");
-
-        jLabel21.setText("Previous Consumption:");
-
-        jLabel22.setText("Current Charge:");
-
-        jLabel23.setText("Account Name:");
-
-        jLabel5.setText("Status:");
-
-        PreviousConsumptionTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PreviousConsumptionTextFieldActionPerformed(evt);
-            }
-        });
-
-        CurrentChargeTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CurrentChargeTextFieldActionPerformed(evt);
-            }
-        });
-
-        TotalAmountTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TotalAmountTextFieldActionPerformed(evt);
-            }
-        });
-
-        DueDateTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                DueDateTextFieldActionPerformed(evt);
-            }
-        });
-
-        FinishPaymentbtn.setText("FINISH PAYMENT");
-        FinishPaymentbtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                FinishPaymentbtnActionPerformed(evt);
-            }
-        });
-
-        jLabel36.setText("APPROVER:");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel36)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addGap(228, 228, 228)
-                                .addComponent(FinishPaymentbtn)))
-                        .addContainerGap(624, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel22)
-                                    .addComponent(jLabel20)
-                                    .addComponent(jLabel21))
-                                .addGap(58, 58, 58)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(CurrentConsumptionTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-                                    .addComponent(PreviousConsumptionTextField)
-                                    .addComponent(CurrentChargeTextField)
-                                    .addComponent(TotalAmountTextField)
-                                    .addComponent(DueDateTextField)
-                                    .addComponent(StatusTextField)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel23)
-                                    .addComponent(jLabel19))
-                                .addGap(99, 99, 99)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(AccountNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                    .addComponent(ReadingDateTextField))))
-                        .addGap(643, 643, 643))))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(54, 54, 54)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(ReadingDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel23)
-                    .addComponent(AccountNameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel20)
-                    .addComponent(CurrentConsumptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel21)
-                    .addComponent(PreviousConsumptionTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel22)
-                    .addComponent(CurrentChargeTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(TotalAmountTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(DueDateTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(StatusTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(58, 58, 58)
-                .addComponent(FinishPaymentbtn)
-                .addGap(39, 39, 39)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel36)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(270, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("Billing Details", jPanel1);
-
-        jPanel10.setBackground(new java.awt.Color(204, 255, 255));
-
-        jLabel6.setText("TOTAL AMOUNT:");
-
-        jLabel8.setText("FINAL APPROVAL:");
-
-        jLabel24.setText("APPROVED BY:");
-
-        jLabel37.setText("CLIENT:");
-
-        jLabel38.setText("STATUS:");
-
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(179, 179, 179)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel24)
-                    .addComponent(jLabel37)
-                    .addComponent(jLabel38))
-                .addGap(85, 85, 85)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(TotalAmountTF)
-                    .addComponent(ApprovedByTF)
-                    .addComponent(ClientTF)
-                    .addComponent(FinalApprovalTF)
-                    .addComponent(StatusTF, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(421, Short.MAX_VALUE))
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(134, 134, 134)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel24)
-                    .addComponent(ApprovedByTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(TotalAmountTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ClientTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel37))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(FinalApprovalTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(StatusTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel38))
-                .addContainerGap(430, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("", jPanel10);
-
-        jPanel9.setBackground(new java.awt.Color(204, 255, 255));
-        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel18.setText("Admin:");
-        jPanel9.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(69, 45, -1, -1));
-        jPanel9.add(jTextField12, new org.netbeans.lib.awtextra.AbsoluteConstraints(126, 42, 294, -1));
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID", "Reading Date", "Account Name", "Current Consumption", "Previous Consumption", "Current Charges", "Total Amount", "Due Date", "Status"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane3.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setMaxWidth(50);
-            jTable2.getColumnModel().getColumn(7).setMaxWidth(180);
-            jTable2.getColumnModel().getColumn(8).setMaxWidth(150);
-        }
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 935, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
-        );
-
-        jPanel9.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(19, 144, 948, -1));
-
-        jLabel31.setFont(new java.awt.Font("Impact", 0, 18)); // NOI18N
-        jLabel31.setText("MONTHLY BILLING REPORTS");
-        jPanel9.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 110, -1, -1));
-
-        jTabbedPane2.addTab("Billing Reports", jPanel9);
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1155, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane2)
-        );
-
-        jTabbedPane1.addTab("Billing Management", jPanel5);
+        jTabbedPane1.addTab("BILLING SUMMARY", jPanel6);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jButton4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1330, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(30, 30, 30)
+                .addComponent(jButton4)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(12, 12, 12)
                 .addComponent(jTabbedPane1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton4)
                 .addContainerGap())
         );
@@ -1081,209 +784,443 @@ public class Admin_Dashboard extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void AccountNoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountNoTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AccountNoTFActionPerformed
+    private void ContactNumberTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ContactNumberTFActionPerformed
 
-    private void AccountNameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountNameTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AccountNameTFActionPerformed
+    }//GEN-LAST:event_ContactNumberTFActionPerformed
 
-    private void PreviousConsumptionTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreviousConsumptionTFActionPerformed
+    private void SIMeterNoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SIMeterNoTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_PreviousConsumptionTFActionPerformed
+    String accountNo = SIAccountNoTF.getText().trim();
+    String accountName = SIAccountNameTF.getText().trim();
+    String meterNo = SIMeterNoTF.getText().trim();
 
-    private void CurrentConsumptionTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CurrentConsumptionTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CurrentConsumptionTFActionPerformed
+    if (!accountNo.isEmpty() && !accountName.isEmpty() && !meterNo.isEmpty()) {
+        syncAccountNumbers(accountNo, accountName, meterNo);  
+    }
+    }//GEN-LAST:event_SIMeterNoTFActionPerformed
 
-    private void BillingPeriodStartTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BillingPeriodStartTFActionPerformed
+    private void DeleteBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBTActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_BillingPeriodStartTFActionPerformed
+         try {
+        
+        String accountNo = SIAccountNoTF.getText().trim(); 
 
-    private void CurrentChargeTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CurrentChargeTFActionPerformed
+      
+        if (accountNo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid Account No.", "Error", JOptionPane.ERROR_MESSAGE);
+            return; 
+        }
+
+       
+        int confirmation = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to delete the client with Account No: " + accountNo + "?", 
+                "Confirm Deletion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (confirmation != JOptionPane.YES_OPTION) {
+            return;  
+        }
+
+        
+        String query = "DELETE FROM clientinfo WHERE Account_No = ?";
+        pst = con.prepareStatement(query);
+        pst.setString(1, accountNo); 
+
+       
+        int rowsDeleted = pst.executeUpdate();
+
+        if (rowsDeleted > 0) {
+            JOptionPane.showMessageDialog(this, "Client information deleted successfully!");
+
+            
+            DefaultTableModel model = (DefaultTableModel) CustomerInfoTable.getModel();
+            for (int i = 0; i < model.getRowCount(); i++) {
+                if (model.getValueAt(i, 0).equals(accountNo)) {  
+                    model.removeRow(i);  
+                    break;
+                }
+            }
+
+           
+            SIAccountNoTF.setText("");  
+            SIAccountNameTF.setText(""); 
+            ServiceAddressTF.setText(""); 
+            ContactNumberTF.setText("");  
+            PropertyCB.setSelectedIndex(-1);  
+            SIMeterNoTF.setText(""); 
+            AccountStatusCB.setSelectedIndex(-1);  
+
+        } else {
+            JOptionPane.showMessageDialog(this, "No record found with Account No: " + accountNo, 
+                                          "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    } catch (SQLException ex) {
+        Logger.getLogger(Admin_Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), 
+                                      "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_DeleteBTActionPerformed
+
+    private void UpdateBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBTActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_CurrentChargeTFActionPerformed
+        String accountNo = SIAccountNoTF.getText().trim();
+
+    if (accountNo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter an Account Number.");
+        return;  // Exit if Account No is empty
+    }
+
+    try {
+        
+        pst = con.prepareStatement(
+            "UPDATE clientinfo SET Account_Name=?, Service_Address=?, Contact_Number=?, Property=?, " +
+            "Account_Status=? WHERE Account_No=?"
+        );
+
+        
+        pst.setString(1, SIAccountNameTF.getText());  
+        pst.setString(2, ServiceAddressTF.getText()); 
+        pst.setInt(3, Integer.parseInt(ContactNumberTF.getText()));  
+        pst.setString(4, (String) PropertyCB.getSelectedItem()); 
+        pst.setString(5, (String) AccountStatusCB.getSelectedItem()); 
+        pst.setString(6, accountNo);  
+
+       
+        int rowsUpdated = pst.executeUpdate();
+
+        if (rowsUpdated > 0) {
+            JOptionPane.showMessageDialog(this, "Client details updated successfully!");
+
+           
+            DefaultTableModel model = (DefaultTableModel) CustomerInfoTable.getModel();
+            int rowIndex = getRowIndexByAccountNo(accountNo); 
+
+            if (rowIndex >= 0) {
+               
+                model.setValueAt(SIAccountNameTF.getText(), rowIndex, 1);  
+                model.setValueAt(ServiceAddressTF.getText(), rowIndex, 2);  
+                model.setValueAt(ContactNumberTF.getText(), rowIndex, 3);  
+                model.setValueAt(PropertyCB.getSelectedItem(), rowIndex, 4);  
+                model.setValueAt(AccountStatusCB.getSelectedItem(), rowIndex, 6);  
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Failed to update client details!");
+        }
+
+    } catch (SQLException | NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Error updating client details: " + ex.getMessage());
+    }
+}
+
+    private int getRowIndexByAccountNo(String accountNo) {
+    DefaultTableModel model = (DefaultTableModel) CustomerInfoTable.getModel();
+    int rowCount = model.getRowCount();
+    for (int i = 0; i < rowCount; i++) {
+        if (model.getValueAt(i, 0).equals(accountNo)) {  
+            return i;
+        }
+    }
+    return -1;    
+    }//GEN-LAST:event_UpdateBTActionPerformed
+
+    private void SearchBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchBTActionPerformed
+        // TODO add your handling code here:
+        String accountNo = SIAccountNoTF.getText().trim();  // Replace with your actual Account No field name
+
+
+    if (accountNo.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Please enter an Account Number.");
+        return; 
+    }
+
+    try {
+        
+        pst = con.prepareStatement("SELECT * FROM clientinfo WHERE Account_No = ?");
+        pst.setString(1, accountNo);  // Set the Account_No parameter in the query
+     
+        rs = pst.executeQuery();
+        
+        if (rs.next()) {
+           
+            SIAccountNameTF.setText(rs.getString("Account_Name"));  
+            ServiceAddressTF.setText(rs.getString("Service_Address")); 
+            ContactNumberTF.setText(String.valueOf(rs.getInt("Contact_Number"))); 
+            PropertyCB.setSelectedItem(rs.getString("Property"));  
+            SIMeterNoTF.setText(rs.getString("Meter_No"));  
+            AccountStatusCB.setSelectedItem(rs.getString("Account_Status"));  
+        } else {
+           
+            JOptionPane.showMessageDialog(this, "No customer found with Account Number: " + accountNo);
+        }
+
+    } catch (SQLException ex) {
+       
+        Logger.getLogger(Admin_Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+        JOptionPane.showMessageDialog(this, "Error during search: " + ex.getMessage());
+    }
+
+    }//GEN-LAST:event_SearchBTActionPerformed
+
+    private void SIAccountNameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SIAccountNameTFActionPerformed
+
+    }//GEN-LAST:event_SIAccountNameTFActionPerformed
+
+    private void CreateBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateBTActionPerformed
+ 
+
+       try {
+    String accountName = SIAccountNameTF.getText().trim();
+    String serviceAddress = ServiceAddressTF.getText().trim();
+
+  
+    if (accountName.isEmpty() || serviceAddress.isEmpty() || ContactNumberTF.getText().trim().isEmpty() ||
+        PropertyCB.getSelectedIndex() == -1 || AccountStatusCB.getSelectedIndex() == -1) {
+        JOptionPane.showMessageDialog(this, "Please fill in all required fields.", "Missing Data", JOptionPane.WARNING_MESSAGE);
+        return; 
+    }
+
+    int contactNumber;  
+    try {
+        contactNumber = Integer.parseInt(ContactNumberTF.getText().trim());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Invalid contact number. Please enter a valid number.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    String selectedProperty = (String) PropertyCB.getSelectedItem();
+    String selectedAccountStatus = (String) AccountStatusCB.getSelectedItem();
+
+    String meterPrefix = "100-";
+    int nextMeterNo = generateNextMeterNo(con); 
+    String meterNo = meterPrefix + String.format("%03d", nextMeterNo); 
+    SIMeterNoTF.setText(meterNo); 
+
+    String newAccountNo = generateNextAccountNo(con);
+
+    pst = con.prepareStatement(
+        "INSERT INTO clientinfo (Account_No, Account_Name, Service_Address, Contact_Number, Property, Meter_No, Account_Status) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?)"
+    );
+
+    pst.setString(1, newAccountNo);
+    pst.setString(2, accountName);
+    pst.setString(3, serviceAddress);
+    pst.setInt(4, contactNumber);
+    pst.setString(5, selectedProperty);
+    pst.setString(6, meterNo);
+    pst.setString(7, selectedAccountStatus);
+
+    int rowsInserted = pst.executeUpdate();
+
+    if (rowsInserted > 0) {
+
+        DefaultTableModel model = (DefaultTableModel) CustomerInfoTable.getModel();
+        model.addRow(new Object[]{
+            newAccountNo, accountName, serviceAddress, contactNumber,
+            selectedProperty, meterNo, selectedAccountStatus
+        });
+
+        SIAccountNameTF.setText("");
+        ServiceAddressTF.setText("");
+        ContactNumberTF.setText("");
+        PropertyCB.setSelectedIndex(-1);
+        AccountStatusCB.setSelectedIndex(-1);
+        SIMeterNoTF.setText("");
+        SIAccountNameTF.requestFocus();
+
+        JOptionPane.showMessageDialog(this, "Client Info Added Successfully! Account No: " + newAccountNo + ", Meter No: " + meterNo);
+    } else {
+        JOptionPane.showMessageDialog(this, "Record Failed to Save!", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+} catch (SQLException ex) {
+    Logger.getLogger(Admin_Dashboard.class.getName()).log(Level.SEVERE, null, ex);
+    JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+} catch (NumberFormatException e) {
+    JOptionPane.showMessageDialog(this, "Invalid input for numeric fields: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+}
+
+
+    }//GEN-LAST:event_CreateBTActionPerformed
+
+    private void SIAccountNoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SIAccountNoTFActionPerformed
+        // TODO add your handling code here:
+    String accountNo = SIAccountNoTF.getText().trim();
+    String accountName = SIAccountNameTF.getText().trim();
+    String meterNo = SIMeterNoTF.getText().trim();
+
+    if (!accountNo.isEmpty() && !accountName.isEmpty() && !meterNo.isEmpty()) {
+        syncAccountNumbers(accountNo, accountName, meterNo); 
+    }
+
+    }//GEN-LAST:event_SIAccountNoTFActionPerformed
+
+    private void MRAccountNoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRAccountNoTFActionPerformed
+        // TODO add your handling code here:
+    String accountNo = MRAccountNoTF.getText().trim();
+    String accountName = MRAccountNameTF.getText().trim();
+    String meterNo = MRMeterNoTF.getText().trim();
+
+    if (!accountNo.isEmpty() && !accountName.isEmpty() && !meterNo.isEmpty()) {
+        syncAccountNumbers(accountNo, accountName, meterNo); 
+    }
+        
+    }//GEN-LAST:event_MRAccountNoTFActionPerformed
+
+    private void MRRateTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRRateTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MRRateTFActionPerformed
+
+    private void MRAccountNameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRAccountNameTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MRAccountNameTFActionPerformed
+
+    private void MRMeterNoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRMeterNoTFActionPerformed
+        // TODO add your handling code here:
+    String accountNo = MRAccountNoTF.getText().trim();
+    String accountName = MRAccountNameTF.getText().trim();
+    String meterNo = MRMeterNoTF.getText().trim();
+
+    if (!accountNo.isEmpty() && !accountName.isEmpty() && !meterNo.isEmpty()) {
+        syncAccountNumbers(accountNo, accountName, meterNo); 
+    }
+    
+    }//GEN-LAST:event_MRMeterNoTFActionPerformed
+
+    private void MRConsumptionTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRConsumptionTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MRConsumptionTFActionPerformed
+
+    private void MRPreviousReadingTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRPreviousReadingTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MRPreviousReadingTFActionPerformed
+
+    private void MRCurrentReadingTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRCurrentReadingTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MRCurrentReadingTFActionPerformed
+
+    private void BDAccountNoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDAccountNoTFActionPerformed
+        // TODO add your handling code here:
+        String accountNo = BDAccountNoTF.getText().trim();
+        String accountName = BDAccountNameTF.getText().trim();
+
+    if (!accountNo.isEmpty() && !accountName.isEmpty()) {
+        syncAccountNumbers(accountNo, accountName, ""); 
+    }
+    }//GEN-LAST:event_BDAccountNoTFActionPerformed
+
+    private void BDAccountNameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDAccountNameTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BDAccountNameTFActionPerformed
+
+    private void BDPreviousReadingTfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDPreviousReadingTfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BDPreviousReadingTfActionPerformed
+
+    private void BDCurrentReadingTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDCurrentReadingTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BDCurrentReadingTFActionPerformed
+
+    private void BDConsumptionTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDConsumptionTFActionPerformed
+        // TODO add your handling code here:
+        calculateBaseCharge(); 
+    }//GEN-LAST:event_BDConsumptionTFActionPerformed
+
+    private void BDRateTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDRateTFActionPerformed
+        // TODO add your handling code here:
+        calculateBaseCharge();
+    }//GEN-LAST:event_BDRateTFActionPerformed
+
+    private void BaseChargeTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BaseChargeTFActionPerformed
+        // TODO add your handling code here:
+         try {
+        
+        BigDecimal consumption = new BigDecimal(BDConsumptionTF.getText().trim());
+        BigDecimal rate = new BigDecimal(BDRateTF.getText().trim());
+
+        
+        BigDecimal baseCharge = consumption.multiply(rate);
+
+        
+        BaseChargeTF.setText(baseCharge.setScale(2, RoundingMode.HALF_UP).toString());
+    } catch (NumberFormatException | ArithmeticException e) {
+      
+        JOptionPane.showMessageDialog(this, "Invalid input. Please enter valid numeric values for consumption and rate.", 
+                                      "Error", JOptionPane.ERROR_MESSAGE);
+    }
+    }//GEN-LAST:event_BaseChargeTFActionPerformed
+
+    private void TotalChargeTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalChargeTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TotalChargeTFActionPerformed
 
     private void DueDateTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DueDateTFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_DueDateTFActionPerformed
 
-    private void TotalAmountDueTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalAmountDueTFActionPerformed
+    private void BSAccountNoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BSAccountNoTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TotalAmountDueTFActionPerformed
+        String accountNo = BSAccountNoTF.getText().trim();
+        String accountName = BSAccountNameTF.getText().trim();
 
-    private void ReadBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReadBTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ReadBTActionPerformed
-
-    private void UpdateBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateBTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_UpdateBTActionPerformed
-
-    private void CreateBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateBTActionPerformed
-        // TODO add your handling code here:
-        
-      try {
-    
-    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-
-    String Account_Name = AccountNameTF.getText();
-    String Service_Address = ServiceAddressTF.getText();
-    int Contact_Number = Integer.parseInt(Contact_NumberTF.getText());
-    String selectedItemProperty = (String) PropertyCB.getSelectedItem();
-    String selectedItemMeter = (String) MeterCB.getSelectedItem();
-    String selectedItemAccount_Status = (String) AccountStatusCB.getSelectedItem();
-    BigDecimal Previous_Consumption = new BigDecimal(PreviousConsumptionTF.getText()).setScale(2, RoundingMode.HALF_UP);
-    BigDecimal Current_Consumption = new BigDecimal(CurrentConsumptionTF.getText()).setScale(2, RoundingMode.HALF_UP);
-    BigDecimal Current_Charge = new BigDecimal(CurrentChargeTF.getText()).setScale(2, RoundingMode.HALF_UP);
-
-    // Parse dates from the input fields
-    Date startDate = sdf.parse(BillingPeriodStartTF.getText());  
-    Date endDate = sdf.parse(BillingPeriodEndTF.getText());      
-    Date readingDate = sdf.parse(ReadingDateTF.getText());     
-    Date dueDate = sdf.parse(DueDateTF.getText());             
-
-    java.sql.Date sqlStartDate = new java.sql.Date(startDate.getTime());
-    java.sql.Date sqlEndDate = new java.sql.Date(endDate.getTime());
-    java.sql.Date sqlReadingDate = new java.sql.Date(readingDate.getTime());
-    java.sql.Date sqlDueDate = new java.sql.Date(dueDate.getTime());
-
-    String newAccountNo = generateNextAccountNo(con);
-
-    
-    BigDecimal Total_Amount_Due = Current_Charge.multiply(Current_Consumption);
-
-   
-    pst = con.prepareStatement(
-        "INSERT INTO clientinfo (Account_No, Account_Name, Service_Address, Contact_Number, Property, Meter, Account_Status, " +
-        "Previous_Consumption, Current_Consumption, Current_Charge, Billing_Period_Start, Billing_Period_End, Reading_Date, Due_Date, Total_Amount_Due) " +
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
-    );
-
-   
-    pst.setString(1, newAccountNo); 
-    pst.setString(2, Account_Name);
-    pst.setString(3, Service_Address);
-    pst.setInt(4, Contact_Number);
-    pst.setString(5, selectedItemProperty);
-    pst.setString(6, selectedItemMeter);
-    pst.setString(7, selectedItemAccount_Status);
-    pst.setBigDecimal(8, Previous_Consumption);
-    pst.setBigDecimal(9, Current_Consumption);
-    pst.setBigDecimal(10, Current_Charge);
-    pst.setDate(11, sqlStartDate);
-    pst.setDate(12, sqlEndDate);
-    pst.setDate(13, sqlReadingDate);
-    pst.setDate(14, sqlDueDate);
-    pst.setBigDecimal(15, Total_Amount_Due);
-
- 
-    int rowsInserted = pst.executeUpdate();
-
-
-    if (rowsInserted > 0) {
-        DefaultTableModel model = (DefaultTableModel) CustomerInfoTable.getModel();
-        model.addRow(new Object[]{
-            newAccountNo, Account_Name, Service_Address, Contact_Number, selectedItemProperty,
-            selectedItemMeter, selectedItemAccount_Status, Previous_Consumption, Current_Consumption,
-            Current_Charge, new SimpleDateFormat("MM/dd/yyyy").format(sqlStartDate),
-            new SimpleDateFormat("MM/dd/yyyy").format(sqlEndDate),
-            new SimpleDateFormat("MM/dd/yyyy").format(sqlReadingDate),
-            new SimpleDateFormat("MM/dd/yyyy").format(sqlDueDate),
-            Total_Amount_Due
-        });
-
-        JOptionPane.showMessageDialog(this, "Client Info Added Successfully! Account_No: " + newAccountNo);
-    } else {
-        JOptionPane.showMessageDialog(this, "Record Failed to Save!");
+    if (!accountNo.isEmpty() && !accountName.isEmpty()) {
+        syncAccountNumbers(accountNo, accountName, ""); 
     }
+    }//GEN-LAST:event_BSAccountNoTFActionPerformed
 
-} catch (ParseException e) {
-    JOptionPane.showMessageDialog(this, "Invalid date format. Please use MM/dd/yyyy.");
-} catch (SQLException ex) {
-    Logger.getLogger(Admin_Dashboard.class.getName()).log(Level.SEVERE, null, ex);
-    JOptionPane.showMessageDialog(this, "Database error: " + ex.getMessage());
-} catch (NumberFormatException e) {
-    JOptionPane.showMessageDialog(this, "Invalid input for numeric fields: " + e.getMessage());
-}
-            
-            
-            
-    }//GEN-LAST:event_CreateBTActionPerformed
-
-    private void CurrentConsumptionTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CurrentConsumptionTextFieldActionPerformed
+    private void BSAccountNameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BSAccountNameTFActionPerformed
         // TODO add your handling code here:
-        PreviousConsumptionTextField.requestFocus();
-    }//GEN-LAST:event_CurrentConsumptionTextFieldActionPerformed
+    }//GEN-LAST:event_BSAccountNameTFActionPerformed
 
-    private void FinishPaymentbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FinishPaymentbtnActionPerformed
-        
-        int a = javax.swing.JOptionPane.showConfirmDialog(
-        null, 
-        "Do you really want to proceed?", 
-        "Select", 
-        javax.swing.JOptionPane.YES_NO_OPTION
-    );
-
-    if (a == javax.swing.JOptionPane.YES_OPTION) {
-        
-        int currentIndex = jTabbedPane2.getSelectedIndex();
-        
-      
-        int nextIndex = currentIndex + 1;
-        
-      
-        if (nextIndex < jTabbedPane2.getTabCount()) {
-            jTabbedPane2.setSelectedIndex(nextIndex);  
-        } else {
-           
-            jTabbedPane2.setSelectedIndex(2); 
-        }
-    }
-    }//GEN-LAST:event_FinishPaymentbtnActionPerformed
-
-    private void ReadingDateTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReadingDateTextFieldActionPerformed
+    private void BillingPeriodStartTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BillingPeriodStartTFActionPerformed
         // TODO add your handling code here:
-        AccountNameTextField.requestFocus();
-    }//GEN-LAST:event_ReadingDateTextFieldActionPerformed
-
-    private void AccountNameTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountNameTextFieldActionPerformed
-        // TODO add your handling code here:
-        CurrentConsumptionTextField.requestFocus();
-    }//GEN-LAST:event_AccountNameTextFieldActionPerformed
-
-    private void PreviousConsumptionTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PreviousConsumptionTextFieldActionPerformed
-        // TODO add your handling code here:
-        CurrentChargeTextField.requestFocus();
-    }//GEN-LAST:event_PreviousConsumptionTextFieldActionPerformed
-
-    private void CurrentChargeTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CurrentChargeTextFieldActionPerformed
-        // TODO add your handling code here:
-       TotalAmountTextField.requestFocus();
-    }//GEN-LAST:event_CurrentChargeTextFieldActionPerformed
-
-    private void TotalAmountTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalAmountTextFieldActionPerformed
-        // TODO add your handling code here:
-        DueDateTextField.requestFocus();
-    }//GEN-LAST:event_TotalAmountTextFieldActionPerformed
-
-    private void DueDateTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DueDateTextFieldActionPerformed
-        // TODO add your handling code here:
-        StatusTextField.requestFocus();
-    }//GEN-LAST:event_DueDateTextFieldActionPerformed
-
-    private void ReadingDateTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReadingDateTFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ReadingDateTFActionPerformed
+    }//GEN-LAST:event_BillingPeriodStartTFActionPerformed
 
     private void BillingPeriodEndTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BillingPeriodEndTFActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BillingPeriodEndTFActionPerformed
 
-    private void Contact_NumberTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Contact_NumberTFActionPerformed
+    private void BSAmountDueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BSAmountDueActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_Contact_NumberTFActionPerformed
+    }//GEN-LAST:event_BSAmountDueActionPerformed
+
+    private void PropertyCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PropertyCBActionPerformed
+        // TODO add your handling code here:
+        String selectedProperty = (String) PropertyCB.getSelectedItem();
+    double taxAmount = 0.0;
+
+    // Set the tax amount based on the selected property
+    switch (selectedProperty) {
+        case "Residential":
+            taxAmount = 30.00;  // Tax for Residential
+            break;
+        case "Commercial":
+            taxAmount = 100.00; // Tax for Commercial
+            break;
+        case "Industrial":
+            taxAmount = 300.00; // Tax for Industrial
+            break;
+        case "Institutional":
+            taxAmount = 50.00;  // Tax for Institutional
+            break;
+        default:
+            taxAmount = 0.00;  // Default tax if no valid property is selected
+            break;
+    }
+
+    // Assuming you have a label or text field to display the tax
+    // Set the tax value to a text field or label
+    TaxAmountTF.setText(String.format("₱%.2f", taxAmount));
+    }//GEN-LAST:event_PropertyCBActionPerformed
+
+    private void TaxAmountTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TaxAmountTFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TaxAmountTFActionPerformed
+
+    private void AccountStatusCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountStatusCBActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AccountStatusCBActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1321,110 +1258,79 @@ public class Admin_Dashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField AccountNameTF;
-    private javax.swing.JTextField AccountNameTextField;
-    private javax.swing.JTextField AccountNoTF;
     private javax.swing.JComboBox<String> AccountStatusCB;
-    private javax.swing.JTextField ApprovedByTF;
+    private javax.swing.JTextField BDAccountNameTF;
+    private javax.swing.JTextField BDAccountNoTF;
+    private javax.swing.JTextField BDConsumptionTF;
+    private javax.swing.JTextField BDCurrentReadingTF;
+    private javax.swing.JTextField BDPreviousReadingTf;
+    private javax.swing.JTextField BDRateTF;
+    private javax.swing.JTextField BSAccountNameTF;
+    private javax.swing.JTextField BSAccountNoTF;
+    private javax.swing.JTextField BSAmountDue;
+    private javax.swing.JTextField BaseChargeTF;
     private javax.swing.JTextField BillingPeriodEndTF;
     private javax.swing.JTextField BillingPeriodStartTF;
-    private javax.swing.JTextField ClientTF;
-    private javax.swing.JTextField Contact_NumberTF;
+    private javax.swing.JTextField ContactNumberTF;
     private javax.swing.JButton CreateBT;
-    private javax.swing.JTextField CurrentChargeTF;
-    private javax.swing.JTextField CurrentChargeTextField;
-    private javax.swing.JTextField CurrentConsumptionTF;
-    private javax.swing.JTextField CurrentConsumptionTextField;
     private javax.swing.JTable CustomerInfoTable;
     private javax.swing.JButton DeleteBT;
     private javax.swing.JTextField DueDateTF;
-    private javax.swing.JTextField DueDateTextField;
-    private javax.swing.JTextField FinalApprovalTF;
-    private javax.swing.JButton FinishPaymentbtn;
-    private javax.swing.JComboBox<String> MeterCB;
-    private javax.swing.JTextField PreviousConsumptionTF;
-    private javax.swing.JTextField PreviousConsumptionTextField;
+    private javax.swing.JTextField MRAccountNameTF;
+    private javax.swing.JTextField MRAccountNoTF;
+    private javax.swing.JTextField MRConsumptionTF;
+    private javax.swing.JTextField MRCurrentReadingTF;
+    private javax.swing.JTextField MRMeterNoTF;
+    private javax.swing.JTextField MRPreviousReadingTF;
+    private javax.swing.JTextField MRRateTF;
     private javax.swing.JComboBox<String> PropertyCB;
-    private javax.swing.JButton ReadBT;
-    private javax.swing.JTextField ReadingDateTF;
-    private javax.swing.JTextField ReadingDateTextField;
+    private javax.swing.JTextField SIAccountNameTF;
+    private javax.swing.JTextField SIAccountNoTF;
+    private javax.swing.JTextField SIMeterNoTF;
+    private javax.swing.JButton SearchBT;
     private javax.swing.JTextArea ServiceAddressTF;
-    private javax.swing.JTextField StatusTF;
-    private javax.swing.JTextField StatusTextField;
-    private javax.swing.JTextField TotalAmountDueTF;
-    private javax.swing.JTextField TotalAmountTF;
-    private javax.swing.JTextField TotalAmountTextField;
+    private javax.swing.JTextField TaxAmountTF;
+    private javax.swing.JTextField TotalChargeTF;
     private javax.swing.JButton UpdateBT;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
-    private javax.swing.JLabel jLabel26;
-    private javax.swing.JLabel jLabel27;
-    private javax.swing.JLabel jLabel28;
-    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
-    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
-    private javax.swing.JLabel jLabel37;
-    private javax.swing.JLabel jLabel38;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel40;
     private javax.swing.JLabel jLabel41;
+    private javax.swing.JLabel jLabel42;
+    private javax.swing.JLabel jLabel43;
+    private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel47;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel10;
-    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanel9;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField12;
-    private javax.swing.JTextField jTextField13;
-    private javax.swing.JTextField jTextField14;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
     // End of variables declaration//GEN-END:variables
 }

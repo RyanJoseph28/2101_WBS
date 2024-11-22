@@ -1,6 +1,5 @@
 package waterbillingsystemrjc;
 
-import waterbillingsystemrjc.Login;
 import javax.swing.JOptionPane;
 
 public class AdminLogin extends javax.swing.JFrame {
@@ -19,7 +18,6 @@ public class AdminLogin extends javax.swing.JFrame {
         PasswordTF = new javax.swing.JPasswordField();
         RetypeTF = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -47,13 +45,6 @@ public class AdminLogin extends javax.swing.JFrame {
 
         jLabel3.setText("Re-type Password :");
 
-        jButton1.setText("LOGIN");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -61,20 +52,14 @@ public class AdminLogin extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(61, 61, 61)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addGap(54, 54, 54)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(UsernameTF)
-                            .addComponent(PasswordTF)
-                            .addComponent(RetypeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1)
-                        .addGap(8, 8, 8)))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addGap(54, 54, 54)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(UsernameTF)
+                    .addComponent(PasswordTF)
+                    .addComponent(RetypeTF, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(85, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -92,9 +77,7 @@ public class AdminLogin extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(RetypeTF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addGap(36, 36, 36)
-                .addComponent(jButton1)
-                .addContainerGap(36, Short.MAX_VALUE))
+                .addContainerGap(95, Short.MAX_VALUE))
         );
 
         pack();
@@ -102,7 +85,7 @@ public class AdminLogin extends javax.swing.JFrame {
 private static final String FIXED_USERNAME = "RJCWBOOP2101***";
 private static final String FIXED_PASSWORD = "OOPDBMS2024!"; 
 
-private int failedAttempts = 0; // Track failed attempts
+private int failedAttempts = 0; 
     private void UsernameTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UsernameTFActionPerformed
     
     }//GEN-LAST:event_UsernameTFActionPerformed
@@ -116,10 +99,6 @@ private int failedAttempts = 0; // Track failed attempts
 
         validateLogin();
     }//GEN-LAST:event_RetypeTFActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
      
 private void validateLogin() {
     String enteredUsername = UsernameTF.getText();
@@ -169,7 +148,6 @@ private void validateLogin() {
     private javax.swing.JPasswordField PasswordTF;
     private javax.swing.JPasswordField RetypeTF;
     private javax.swing.JTextField UsernameTF;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
