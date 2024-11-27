@@ -78,6 +78,17 @@ import java.util.Vector;
         return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
     }
 }
+   
+   public class DBConnection2 {
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/java_user_database"; // Replace with your second DB URL
+    private static final String DB_USER = "root"; // Replace with your second DB username if different
+    private static final String DB_PASSWORD = ""; // Replace with your second DB password if different
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+    
+    }
+}
     
    private int generateNextMeterNo(Connection con) throws SQLException {
     Statement stmt = con.createStatement();
@@ -403,7 +414,8 @@ import java.util.Vector;
         }
     }
     
-    ;
+    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -412,7 +424,7 @@ import java.util.Vector;
         jPanel8 = new javax.swing.JPanel();
         jLabel30 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -437,6 +449,7 @@ import java.util.Vector;
         jLabel34 = new javax.swing.JLabel();
         ContactNumberTF = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         MRAccountNoTF = new javax.swing.JTextField();
@@ -453,6 +466,8 @@ import java.util.Vector;
         MRPreviousReadingTF = new javax.swing.JTextField();
         MRCurrentReadingTF = new javax.swing.JTextField();
         MRAddToReceipt = new javax.swing.JButton();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel26 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel39 = new javax.swing.JLabel();
         BDAccountNoTF = new javax.swing.JTextField();
@@ -473,6 +488,8 @@ import java.util.Vector;
         BDTaxAmountTF = new javax.swing.JTextField();
         jLabel56 = new javax.swing.JLabel();
         BDAddToReceipt = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel51 = new javax.swing.JLabel();
         BSAccountNoTF = new javax.swing.JTextField();
@@ -487,6 +504,8 @@ import java.util.Vector;
         jLabel68 = new javax.swing.JLabel();
         BSDueDateTF = new javax.swing.JTextField();
         BSAddToReceipt = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel46 = new javax.swing.JLabel();
         GRAccountNoTF = new javax.swing.JTextField();
@@ -522,11 +541,12 @@ import java.util.Vector;
         GRServiceAddressTF = new javax.swing.JTextArea();
         jLabel70 = new javax.swing.JLabel();
         GRMeterNoTF = new javax.swing.JTextField();
+        jPanel11 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
         GRReceipt = new javax.swing.JTextArea();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        PArea = new javax.swing.JTextArea();
         jButton1 = new javax.swing.JButton();
         jLabel71 = new javax.swing.JLabel();
         PAccountNoTF = new javax.swing.JTextField();
@@ -537,12 +557,36 @@ import java.util.Vector;
         PaymentMethodCB = new javax.swing.JComboBox<>();
         jButton2 = new javax.swing.JButton();
         jLabel76 = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        PArea = new javax.swing.JTextArea();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel31 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        CLTable = new javax.swing.JTable();
+        DisplayClientsBT = new javax.swing.JButton();
+        CLSearchTF = new javax.swing.JTextField();
+        CLSearchBT = new javax.swing.JButton();
+        CLDeleteBT = new javax.swing.JButton();
+        CLDeleteAllBT = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel35 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel37 = new javax.swing.JLabel();
+        jPanel13 = new javax.swing.JPanel();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
         LogoutBT = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -550,10 +594,10 @@ import java.util.Vector;
 
         jTabbedPane1.setBackground(new java.awt.Color(0, 51, 51));
         jTabbedPane1.setForeground(new java.awt.Color(255, 255, 255));
-        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.LEFT);
+        jTabbedPane1.setToolTipText("");
         jTabbedPane1.setFont(new java.awt.Font("Franklin Gothic Demi Cond", 0, 12)); // NOI18N
 
-        jPanel8.setBackground(new java.awt.Color(0, 204, 204));
+        jPanel8.setBackground(new java.awt.Color(0, 51, 51));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel30.setFont(new java.awt.Font("Cooper Black", 0, 48)); // NOI18N
@@ -564,14 +608,14 @@ import java.util.Vector;
         jLabel14.setFont(new java.awt.Font("Rockwell Extra Bold", 0, 18)); // NOI18N
         jLabel14.setForeground(new java.awt.Color(255, 255, 255));
         jLabel14.setText("Welcome to your Dashboard");
-        jPanel8.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 340, -1, -1));
+        jPanel8.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 380, -1, -1));
 
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
-        jPanel8.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1190, 670));
+        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
+        jPanel8.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1190, 620));
 
         jTabbedPane1.addTab("", jPanel8);
 
-        jPanel2.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel2.setBackground(new java.awt.Color(0, 51, 51));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
@@ -601,13 +645,15 @@ import java.util.Vector;
         });
         jPanel2.add(SIAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 50, 312, 40));
 
+        CreateBT.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        CreateBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/add-user (1).png"))); // NOI18N
         CreateBT.setText("CREATE");
         CreateBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CreateBTActionPerformed(evt);
             }
         });
-        jPanel2.add(CreateBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 310, 87, 44));
+        jPanel2.add(CreateBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 330, 110, 44));
 
         SIAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -616,29 +662,35 @@ import java.util.Vector;
         });
         jPanel2.add(SIAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 312, 40));
 
+        SearchBT.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        SearchBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/focus (1).png"))); // NOI18N
         SearchBT.setText("SEARCH");
         SearchBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SearchBTActionPerformed(evt);
             }
         });
-        jPanel2.add(SearchBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 310, 92, 44));
+        jPanel2.add(SearchBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 330, 110, 44));
 
+        UpdateBT.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        UpdateBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/update (1).png"))); // NOI18N
         UpdateBT.setText("UPDATE");
         UpdateBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 UpdateBTActionPerformed(evt);
             }
         });
-        jPanel2.add(UpdateBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 310, 92, 44));
+        jPanel2.add(UpdateBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 330, 110, 44));
 
+        DeleteBT.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        DeleteBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/delete (1).png"))); // NOI18N
         DeleteBT.setText("DELETE");
         DeleteBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 DeleteBTActionPerformed(evt);
             }
         });
-        jPanel2.add(DeleteBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 310, 92, 44));
+        jPanel2.add(DeleteBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 330, 100, 44));
 
         SIPropertyCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Residential", "Commercial", "Industrial", "Institutional" }));
         SIPropertyCB.addActionListener(new java.awt.event.ActionListener() {
@@ -681,6 +733,7 @@ import java.util.Vector;
 
         CustomerInfoTable.setBackground(new java.awt.Color(0, 102, 102));
         CustomerInfoTable.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(0, 102, 102), null, null));
+        CustomerInfoTable.setForeground(new java.awt.Color(255, 255, 255));
         CustomerInfoTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
@@ -783,89 +836,101 @@ import java.util.Vector;
         jPanel2.add(ContactNumberTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 310, 40));
 
         jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
-        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1190, 670));
+        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1190, 640));
+
+        jLabel25.setFont(new java.awt.Font("MingLiU_HKSCS-ExtB", 1, 16)); // NOI18N
+        jLabel25.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel25.setText("SERVICE INFORMATION");
+        jPanel2.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 240, -1));
 
         jTabbedPane1.addTab("SERVICE INFORMATION", jPanel2);
 
-        jPanel7.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel7.setBackground(new java.awt.Color(0, 51, 51));
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Account No. :");
-        jPanel7.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 70, -1, 27));
+        jPanel7.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, -1, 20));
 
         MRAccountNoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MRAccountNoTFActionPerformed(evt);
             }
         });
-        jPanel7.add(MRAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 60, 312, 40));
+        jPanel7.add(MRAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, 312, 30));
 
         MRRateTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MRRateTFActionPerformed(evt);
             }
         });
-        jPanel7.add(MRRateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 250, 310, 40));
+        jPanel7.add(MRRateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 370, 310, 30));
 
         jLabel36.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel36.setForeground(new java.awt.Color(255, 255, 255));
         jLabel36.setText("Meter No. :");
-        jPanel7.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 200, -1, -1));
+        jPanel7.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, -1, 10));
 
         MRAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MRAccountNameTFActionPerformed(evt);
             }
         });
-        jPanel7.add(MRAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 120, 312, 40));
+        jPanel7.add(MRAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 312, 30));
 
         jLabel6.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Account Name :");
-        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, -1, -1));
+        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 260, -1, 10));
 
         jLabel1.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Consumption :");
-        jPanel7.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 450, -1, -1));
+        jPanel7.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 380, -1, 20));
 
         jLabel2.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Previous Reading :");
-        jPanel7.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 320, -1, -1));
+        jPanel7.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 260, -1, 20));
 
         jLabel7.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Current Reading :");
-        jPanel7.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 380, -1, -1));
+        jPanel7.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 320, -1, 20));
 
         jLabel8.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
         jLabel8.setText("Rate :");
-        jPanel7.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, -1, -1));
+        jPanel7.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 380, -1, 10));
 
         MRMeterNoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MRMeterNoTFActionPerformed(evt);
             }
         });
-        jPanel7.add(MRMeterNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 310, 40));
+        jPanel7.add(MRMeterNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 310, 30));
 
         MRConsumptionTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MRConsumptionTFActionPerformed(evt);
             }
         });
-        jPanel7.add(MRConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 430, 310, 40));
+        jPanel7.add(MRConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 370, 310, 30));
 
         MRPreviousReadingTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MRPreviousReadingTFActionPerformed(evt);
             }
         });
-        jPanel7.add(MRPreviousReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 310, 40));
+        jPanel7.add(MRPreviousReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 250, 310, 30));
 
         MRCurrentReadingTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 MRCurrentReadingTFActionPerformed(evt);
             }
         });
-        jPanel7.add(MRCurrentReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 370, 310, 40));
+        jPanel7.add(MRCurrentReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 310, 310, 30));
 
         MRAddToReceipt.setText("ADD TO RECEIPT");
         MRAddToReceipt.addActionListener(new java.awt.event.ActionListener() {
@@ -873,111 +938,128 @@ import java.util.Vector;
                 MRAddToReceiptActionPerformed(evt);
             }
         });
-        jPanel7.add(MRAddToReceipt, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 510, -1, -1));
+        jPanel7.add(MRAddToReceipt, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 450, -1, 20));
+
+        jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
+        jPanel7.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1190, 640));
+
+        jLabel26.setFont(new java.awt.Font("MingLiU_HKSCS-ExtB", 1, 16)); // NOI18N
+        jLabel26.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel26.setText("METER READING");
+        jPanel7.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 20, 240, -1));
 
         jTabbedPane1.addTab("METER READING", jPanel7);
 
-        jPanel5.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel5.setBackground(new java.awt.Color(0, 51, 51));
         jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel39.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel39.setForeground(new java.awt.Color(255, 255, 255));
         jLabel39.setText("Account No. :");
-        jPanel5.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, -1, 27));
+        jPanel5.add(jLabel39, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, -1, 27));
 
         BDAccountNoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDAccountNoTFActionPerformed(evt);
             }
         });
-        jPanel5.add(BDAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 30, 312, 30));
+        jPanel5.add(BDAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 160, 312, 30));
 
         BDAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDAccountNameTFActionPerformed(evt);
             }
         });
-        jPanel5.add(BDAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 70, 312, 30));
+        jPanel5.add(BDAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 220, 312, 30));
 
         jLabel40.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel40.setForeground(new java.awt.Color(255, 255, 255));
         jLabel40.setText("Account Name :");
-        jPanel5.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, -1, -1));
+        jPanel5.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 230, -1, -1));
 
         jLabel41.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel41.setForeground(new java.awt.Color(255, 255, 255));
         jLabel41.setText("Previous Reading :");
-        jPanel5.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, 27));
+        jPanel5.add(jLabel41, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, 27));
 
         BDPreviousReadingTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDPreviousReadingTFActionPerformed(evt);
             }
         });
-        jPanel5.add(BDPreviousReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 110, 312, 30));
+        jPanel5.add(BDPreviousReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 280, 312, 30));
 
         BDCurrentReadingTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDCurrentReadingTFActionPerformed(evt);
             }
         });
-        jPanel5.add(BDCurrentReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, 312, 30));
+        jPanel5.add(BDCurrentReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 340, 312, 30));
 
         jLabel42.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel42.setForeground(new java.awt.Color(255, 255, 255));
         jLabel42.setText("Current Reading :");
-        jPanel5.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, -1, -1));
+        jPanel5.add(jLabel42, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 350, -1, -1));
 
         jLabel43.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel43.setForeground(new java.awt.Color(255, 255, 255));
         jLabel43.setText("Consumption :");
-        jPanel5.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, -1, 27));
+        jPanel5.add(jLabel43, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 400, -1, 27));
 
         BDConsumptionTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDConsumptionTFActionPerformed(evt);
             }
         });
-        jPanel5.add(BDConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 312, 30));
+        jPanel5.add(BDConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 400, 312, 30));
 
         BDRateTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDRateTFActionPerformed(evt);
             }
         });
-        jPanel5.add(BDRateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 230, 312, 30));
+        jPanel5.add(BDRateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 180, 312, 30));
 
         jLabel44.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel44.setForeground(new java.awt.Color(255, 255, 255));
         jLabel44.setText("Rate :");
-        jPanel5.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 240, -1, -1));
+        jPanel5.add(jLabel44, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 190, -1, -1));
 
         jLabel45.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel45.setForeground(new java.awt.Color(255, 255, 255));
         jLabel45.setText("Base Charge :");
-        jPanel5.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 310, -1, 27));
+        jPanel5.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 300, -1, 27));
 
         BDBaseChargeTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDBaseChargeTFActionPerformed(evt);
             }
         });
-        jPanel5.add(BDBaseChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 310, 312, 30));
+        jPanel5.add(BDBaseChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 300, 312, 30));
 
         jLabel47.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel47.setForeground(new java.awt.Color(255, 255, 255));
         jLabel47.setText("Penalty Charge :");
-        jPanel5.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 350, -1, 27));
+        jPanel5.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 360, -1, 27));
 
         BDPenaltyChargeTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDPenaltyChargeTFActionPerformed(evt);
             }
         });
-        jPanel5.add(BDPenaltyChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 350, 312, 30));
+        jPanel5.add(BDPenaltyChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 360, 312, 30));
 
         BDTaxAmountTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BDTaxAmountTFActionPerformed(evt);
             }
         });
-        jPanel5.add(BDTaxAmountTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 270, 312, 30));
+        jPanel5.add(BDTaxAmountTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 240, 312, 30));
 
         jLabel56.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel56.setForeground(new java.awt.Color(255, 255, 255));
         jLabel56.setText("Tax :");
-        jPanel5.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 280, -1, -1));
+        jPanel5.add(jLabel56, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 250, -1, -1));
 
         BDAddToReceipt.setText("ADD TO RECEIPT");
         BDAddToReceipt.addActionListener(new java.awt.event.ActionListener() {
@@ -985,78 +1067,93 @@ import java.util.Vector;
                 BDAddToReceiptActionPerformed(evt);
             }
         });
-        jPanel5.add(BDAddToReceipt, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 510, -1, -1));
+        jPanel5.add(BDAddToReceipt, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 430, -1, -1));
+
+        jLabel17.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel17.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
+        jPanel5.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1190, 640));
+
+        jLabel27.setFont(new java.awt.Font("MingLiU_HKSCS-ExtB", 1, 16)); // NOI18N
+        jLabel27.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel27.setText("BILLING DETAILS");
+        jPanel5.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 240, -1));
 
         jTabbedPane1.addTab("BILLING DETAILS", jPanel5);
 
-        jPanel6.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel6.setBackground(new java.awt.Color(0, 51, 51));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel51.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel51.setForeground(new java.awt.Color(255, 255, 255));
         jLabel51.setText("Account No. :");
-        jPanel6.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 30, -1, 27));
+        jPanel6.add(jLabel51, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 170, -1, 27));
 
         BSAccountNoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BSAccountNoTFActionPerformed(evt);
             }
         });
-        jPanel6.add(BSAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 30, 312, 30));
+        jPanel6.add(BSAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 170, 312, 30));
 
         BSAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BSAccountNameTFActionPerformed(evt);
             }
         });
-        jPanel6.add(BSAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, 312, 30));
+        jPanel6.add(BSAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 230, 312, 30));
 
         jLabel52.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel52.setForeground(new java.awt.Color(255, 255, 255));
         jLabel52.setText("Account Name :");
-        jPanel6.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, -1, -1));
+        jPanel6.add(jLabel52, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 240, -1, -1));
 
         jLabel53.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel53.setForeground(new java.awt.Color(255, 255, 255));
         jLabel53.setText("Billing Period Start :");
-        jPanel6.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 110, -1, 27));
+        jPanel6.add(jLabel53, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 290, -1, 27));
 
         BSBillingPeriodStartTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BSBillingPeriodStartTFActionPerformed(evt);
             }
         });
-        jPanel6.add(BSBillingPeriodStartTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 110, 312, 30));
+        jPanel6.add(BSBillingPeriodStartTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 290, 312, 30));
 
         BSBillingPeriodEndTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BSBillingPeriodEndTFActionPerformed(evt);
             }
         });
-        jPanel6.add(BSBillingPeriodEndTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, 312, 30));
+        jPanel6.add(BSBillingPeriodEndTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 350, 312, 30));
 
         jLabel54.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel54.setForeground(new java.awt.Color(255, 255, 255));
         jLabel54.setText("Billing Period End :");
-        jPanel6.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, -1, -1));
+        jPanel6.add(jLabel54, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 360, -1, -1));
 
         jLabel55.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel55.setForeground(new java.awt.Color(255, 255, 255));
         jLabel55.setText("Total Amount Due :");
-        jPanel6.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 230, -1, 27));
+        jPanel6.add(jLabel55, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 480, -1, 27));
 
         BSTotalAmountDueTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BSTotalAmountDueTFActionPerformed(evt);
             }
         });
-        jPanel6.add(BSTotalAmountDueTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 230, 312, 30));
+        jPanel6.add(BSTotalAmountDueTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 480, 312, 30));
 
         jLabel68.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel68.setForeground(new java.awt.Color(255, 255, 255));
         jLabel68.setText("Due Date :");
-        jPanel6.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 190, -1, 27));
+        jPanel6.add(jLabel68, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 410, -1, 27));
 
         BSDueDateTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BSDueDateTFActionPerformed(evt);
             }
         });
-        jPanel6.add(BSDueDateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 190, 312, 30));
+        jPanel6.add(BSDueDateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 410, 312, 30));
 
         BSAddToReceipt.setText("ADD TO RECEIPT");
         BSAddToReceipt.addActionListener(new java.awt.event.ActionListener() {
@@ -1064,253 +1161,306 @@ import java.util.Vector;
                 BSAddToReceiptActionPerformed(evt);
             }
         });
-        jPanel6.add(BSAddToReceipt, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 300, -1, -1));
+        jPanel6.add(BSAddToReceipt, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 530, -1, -1));
+
+        jLabel24.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel24.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
+        jPanel6.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1190, 640));
+
+        jLabel28.setFont(new java.awt.Font("MingLiU_HKSCS-ExtB", 1, 16)); // NOI18N
+        jLabel28.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel28.setText("BILLING SUMMARY");
+        jPanel6.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 20, 240, -1));
 
         jTabbedPane1.addTab("BILLING SUMMARY", jPanel6);
 
-        jPanel1.setBackground(new java.awt.Color(51, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 51, 51));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel46.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel46.setForeground(java.awt.Color.white);
         jLabel46.setText("Account No. :");
-        jPanel1.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 10, -1, 27));
+        jPanel1.add(jLabel46, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, -1, 27));
 
         GRAccountNoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRAccountNoTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 10, 312, 30));
+        jPanel1.add(GRAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 40, 312, 30));
 
         GRAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRAccountNameTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 50, 312, 30));
+        jPanel1.add(GRAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 80, 312, 30));
 
         jLabel48.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel48.setForeground(java.awt.Color.white);
         jLabel48.setText("Account Name :");
-        jPanel1.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 60, -1, -1));
+        jPanel1.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 90, -1, -1));
 
         jLabel49.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel49.setForeground(java.awt.Color.white);
         jLabel49.setText("Previous Reading :");
-        jPanel1.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, -1, 27));
+        jPanel1.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 240, -1, 27));
 
         GRPreviousReadingTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRPreviousReadingTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRPreviousReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 210, 312, 30));
+        jPanel1.add(GRPreviousReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 240, 312, 30));
 
         GRCurrentReadingTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRCurrentReadingTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRCurrentReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 250, 312, 30));
+        jPanel1.add(GRCurrentReadingTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 280, 312, 30));
 
         jLabel57.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel57.setForeground(java.awt.Color.white);
         jLabel57.setText("Current Reading :");
-        jPanel1.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, -1, -1));
+        jPanel1.add(jLabel57, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, -1, -1));
 
         jLabel58.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel58.setForeground(java.awt.Color.white);
         jLabel58.setText("Consumption :");
-        jPanel1.add(jLabel58, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 290, -1, 27));
+        jPanel1.add(jLabel58, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 320, -1, 27));
 
         GRConsumptionTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRConsumptionTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 290, 312, 30));
+        jPanel1.add(GRConsumptionTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 320, 312, 30));
 
         GRRateTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRRateTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRRateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 330, 312, 30));
+        jPanel1.add(GRRateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 360, 312, 30));
 
         jLabel59.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel59.setForeground(java.awt.Color.white);
         jLabel59.setText("Rate :");
-        jPanel1.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 340, -1, -1));
+        jPanel1.add(jLabel59, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 370, -1, -1));
 
         jLabel60.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel60.setForeground(java.awt.Color.white);
         jLabel60.setText("Base Charge :");
-        jPanel1.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 410, -1, 27));
+        jPanel1.add(jLabel60, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 440, -1, 27));
 
         GRBaseChargeTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRBaseChargeTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRBaseChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 410, 312, 30));
+        jPanel1.add(GRBaseChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 440, 312, 30));
 
         jLabel61.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel61.setForeground(java.awt.Color.white);
         jLabel61.setText("Penalty Charge :");
-        jPanel1.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 450, -1, 27));
+        jPanel1.add(jLabel61, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 480, -1, 27));
 
         GRPenaltyChargeTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRPenaltyChargeTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRPenaltyChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 450, 312, 30));
+        jPanel1.add(GRPenaltyChargeTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 480, 312, 30));
 
         GRDueDateTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRDueDateTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRDueDateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 570, 312, 30));
+        jPanel1.add(GRDueDateTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 600, 312, 30));
 
         jLabel62.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel62.setForeground(java.awt.Color.white);
         jLabel62.setText("Due Date:");
-        jPanel1.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 580, -1, -1));
+        jPanel1.add(jLabel62, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 610, -1, -1));
 
         GRTaxAmountTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRTaxAmountTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRTaxAmountTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 370, 312, 30));
+        jPanel1.add(GRTaxAmountTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 400, 312, 30));
 
         jLabel63.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel63.setForeground(java.awt.Color.white);
         jLabel63.setText("Tax :");
-        jPanel1.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 380, -1, -1));
+        jPanel1.add(jLabel63, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 410, -1, -1));
 
         GRPropertyTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRPropertyTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRPropertyTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 130, 312, 30));
+        jPanel1.add(GRPropertyTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 160, 312, 30));
 
         jLabel64.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel64.setForeground(java.awt.Color.white);
         jLabel64.setText("Meter No. :");
-        jPanel1.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 180, -1, -1));
+        jPanel1.add(jLabel64, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 210, -1, -1));
 
         jLabel65.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel65.setForeground(java.awt.Color.white);
         jLabel65.setText("Billing Period Start :");
-        jPanel1.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 490, -1, 27));
+        jPanel1.add(jLabel65, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 520, -1, 27));
 
         GRBillingPeriodStartTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRBillingPeriodStartTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRBillingPeriodStartTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 490, 312, 30));
+        jPanel1.add(GRBillingPeriodStartTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 520, 312, 30));
 
         GRBillingPeriodEndTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRBillingPeriodEndTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRBillingPeriodEndTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 530, 312, 30));
+        jPanel1.add(GRBillingPeriodEndTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 560, 312, 30));
 
         jLabel66.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel66.setForeground(java.awt.Color.white);
         jLabel66.setText("Billing Period End :");
-        jPanel1.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 540, -1, -1));
+        jPanel1.add(jLabel66, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 570, -1, -1));
 
         jLabel67.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel67.setForeground(java.awt.Color.white);
         jLabel67.setText("Total Amount Due :");
-        jPanel1.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 610, -1, 27));
+        jPanel1.add(jLabel67, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 640, -1, 27));
 
         GRTotalAmountDueTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRTotalAmountDueTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRTotalAmountDueTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 610, 312, 30));
+        jPanel1.add(GRTotalAmountDueTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 640, 312, 30));
 
+        GRBT.setFont(new java.awt.Font("Rockwell", 0, 12)); // NOI18N
         GRBT.setText("GENERATE RECEIPT");
         GRBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRBTActionPerformed(evt);
             }
         });
-        jPanel1.add(GRBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 600, -1, -1));
+        jPanel1.add(GRBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 610, -1, 20));
 
         jLabel69.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel69.setForeground(java.awt.Color.white);
         jLabel69.setText("Service Area :");
-        jPanel1.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 100, -1, -1));
+        jPanel1.add(jLabel69, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 130, -1, -1));
 
         GRServiceAddressTF.setColumns(20);
         GRServiceAddressTF.setRows(5);
         jScrollPane1.setViewportView(GRServiceAddressTF);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 90, 310, 30));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 120, 310, 30));
 
         jLabel70.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel70.setForeground(java.awt.Color.white);
         jLabel70.setText("Property :");
-        jPanel1.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 140, -1, -1));
+        jPanel1.add(jLabel70, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 170, -1, -1));
 
         GRMeterNoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 GRMeterNoTFActionPerformed(evt);
             }
         });
-        jPanel1.add(GRMeterNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 170, 312, 30));
+        jPanel1.add(GRMeterNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 200, 312, 30));
+
+        jPanel11.setBackground(new java.awt.Color(0, 102, 102));
 
         GRReceipt.setColumns(20);
+        GRReceipt.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         GRReceipt.setRows(5);
         jScrollPane7.setViewportView(GRReceipt);
 
-        jPanel1.add(jScrollPane7, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 50, 330, 510));
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 80, 360, -1));
+
+        jLabel19.setForeground(java.awt.Color.white);
+        jLabel19.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1190, 640));
+
+        jLabel29.setFont(new java.awt.Font("MingLiU_HKSCS-ExtB", 1, 16)); // NOI18N
+        jLabel29.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel29.setText("GENERATE RECEIPT");
+        jPanel1.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 20, 240, -1));
 
         jTabbedPane1.addTab("GENERATE RECEIPT", jPanel1);
 
-        jPanel3.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel3.setBackground(new java.awt.Color(0, 51, 51));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        PArea.setColumns(20);
-        PArea.setRows(5);
-        jScrollPane8.setViewportView(PArea);
-
-        jPanel3.add(jScrollPane8, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 50, -1, 250));
-
+        jButton1.setFont(new java.awt.Font("Sitka Text", 0, 13)); // NOI18N
         jButton1.setText("SEND");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 320, -1, -1));
+        jPanel3.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 420, -1, -1));
 
         jLabel71.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel71.setForeground(java.awt.Color.white);
         jLabel71.setText("Account No. :");
-        jPanel3.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 70, -1, 27));
+        jPanel3.add(jLabel71, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, -1, 27));
 
         PAccountNoTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PAccountNoTFActionPerformed(evt);
             }
         });
-        jPanel3.add(PAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 70, 312, 30));
+        jPanel3.add(PAccountNoTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, 312, 30));
 
         PAccountNameTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PAccountNameTFActionPerformed(evt);
             }
         });
-        jPanel3.add(PAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, 312, 30));
+        jPanel3.add(PAccountNameTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, 312, 30));
 
         jLabel72.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel72.setForeground(java.awt.Color.white);
         jLabel72.setText("Account Name :");
-        jPanel3.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 120, -1, -1));
+        jPanel3.add(jLabel72, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, -1, -1));
 
         jLabel73.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel73.setForeground(java.awt.Color.white);
         jLabel73.setText("Total Amount Due :");
-        jPanel3.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 150, -1, 27));
+        jPanel3.add(jLabel73, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 190, -1, 27));
 
         PTotalAmountDueTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 PTotalAmountDueTFActionPerformed(evt);
             }
         });
-        jPanel3.add(PTotalAmountDueTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, 312, 30));
+        jPanel3.add(PTotalAmountDueTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, 312, 30));
 
         PaymentMethodCB.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "E-Payment" }));
         PaymentMethodCB.addActionListener(new java.awt.event.ActionListener() {
@@ -1318,26 +1468,111 @@ import java.util.Vector;
                 PaymentMethodCBActionPerformed(evt);
             }
         });
-        jPanel3.add(PaymentMethodCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, 310, 30));
+        jPanel3.add(PaymentMethodCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, 310, 30));
 
+        jButton2.setFont(new java.awt.Font("Sitka Text", 0, 13)); // NOI18N
         jButton2.setText("Add to Receipt");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel3.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 240, -1, -1));
+        jPanel3.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 280, -1, -1));
 
         jLabel76.setFont(new java.awt.Font("OCR A Extended", 0, 14)); // NOI18N
+        jLabel76.setForeground(java.awt.Color.white);
         jLabel76.setText("Payment Method :");
-        jPanel3.add(jLabel76, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, -1, -1));
+        jPanel3.add(jLabel76, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 240, -1, -1));
+
+        jPanel10.setBackground(new java.awt.Color(0, 102, 102));
+
+        PArea.setColumns(20);
+        PArea.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        PArea.setRows(5);
+        jScrollPane8.setViewportView(PArea);
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jPanel3.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 80, -1, 320));
+
+        jLabel20.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel20.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
+        jPanel3.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1190, 640));
+
+        jLabel31.setFont(new java.awt.Font("MingLiU_HKSCS-ExtB", 1, 16)); // NOI18N
+        jLabel31.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel31.setText("PAYMENT");
+        jPanel3.add(jLabel31, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 20, 240, 20));
 
         jTabbedPane1.addTab("PAYMENT ", jPanel3);
 
+        jPanel9.setBackground(new java.awt.Color(0, 51, 51));
         jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        CLTable.setBackground(new java.awt.Color(0, 102, 102));
+        CLTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
@@ -1355,61 +1590,285 @@ import java.util.Vector;
                 return canEdit [columnIndex];
             }
         });
-        jTable2.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        jTable2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jTable2.getTableHeader().setReorderingAllowed(false);
-        jScrollPane5.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setResizable(false);
-            jTable2.getColumnModel().getColumn(1).setResizable(false);
-            jTable2.getColumnModel().getColumn(2).setResizable(false);
-            jTable2.getColumnModel().getColumn(3).setResizable(false);
-            jTable2.getColumnModel().getColumn(4).setResizable(false);
-            jTable2.getColumnModel().getColumn(5).setResizable(false);
-            jTable2.getColumnModel().getColumn(6).setResizable(false);
-            jTable2.getColumnModel().getColumn(7).setResizable(false);
-            jTable2.getColumnModel().getColumn(8).setResizable(false);
-            jTable2.getColumnModel().getColumn(9).setResizable(false);
-            jTable2.getColumnModel().getColumn(10).setResizable(false);
-            jTable2.getColumnModel().getColumn(11).setResizable(false);
-            jTable2.getColumnModel().getColumn(12).setResizable(false);
-            jTable2.getColumnModel().getColumn(13).setResizable(false);
-            jTable2.getColumnModel().getColumn(14).setResizable(false);
-            jTable2.getColumnModel().getColumn(15).setResizable(false);
+        CLTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        CLTable.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        CLTable.getTableHeader().setReorderingAllowed(false);
+        jScrollPane5.setViewportView(CLTable);
+        if (CLTable.getColumnModel().getColumnCount() > 0) {
+            CLTable.getColumnModel().getColumn(0).setResizable(false);
+            CLTable.getColumnModel().getColumn(1).setResizable(false);
+            CLTable.getColumnModel().getColumn(2).setResizable(false);
+            CLTable.getColumnModel().getColumn(3).setResizable(false);
+            CLTable.getColumnModel().getColumn(4).setResizable(false);
+            CLTable.getColumnModel().getColumn(5).setResizable(false);
+            CLTable.getColumnModel().getColumn(6).setResizable(false);
+            CLTable.getColumnModel().getColumn(7).setResizable(false);
+            CLTable.getColumnModel().getColumn(8).setResizable(false);
+            CLTable.getColumnModel().getColumn(9).setResizable(false);
+            CLTable.getColumnModel().getColumn(10).setResizable(false);
+            CLTable.getColumnModel().getColumn(11).setResizable(false);
+            CLTable.getColumnModel().getColumn(12).setResizable(false);
+            CLTable.getColumnModel().getColumn(13).setResizable(false);
+            CLTable.getColumnModel().getColumn(14).setResizable(false);
+            CLTable.getColumnModel().getColumn(15).setResizable(false);
         }
 
-        jPanel9.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(67, 49, 1070, -1));
+        jPanel9.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 1110, 410));
+
+        DisplayClientsBT.setText("DISPLAY CLIENTS");
+        DisplayClientsBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DisplayClientsBTActionPerformed(evt);
+            }
+        });
+        jPanel9.add(DisplayClientsBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, -1, -1));
+        jPanel9.add(CLSearchTF, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 90, 80, -1));
+
+        CLSearchBT.setText("SEARCH");
+        CLSearchBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CLSearchBTActionPerformed(evt);
+            }
+        });
+        jPanel9.add(CLSearchBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 60, -1, -1));
+
+        CLDeleteBT.setText("DELETE");
+        CLDeleteBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CLDeleteBTActionPerformed(evt);
+            }
+        });
+        jPanel9.add(CLDeleteBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 60, -1, -1));
+
+        CLDeleteAllBT.setText("DELETE ALL");
+        CLDeleteAllBT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CLDeleteAllBTActionPerformed(evt);
+            }
+        });
+        jPanel9.add(CLDeleteAllBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 60, -1, -1));
+
+        jLabel21.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
+        jPanel9.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1190, 640));
+
+        jLabel35.setFont(new java.awt.Font("MingLiU_HKSCS-ExtB", 1, 16)); // NOI18N
+        jLabel35.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel35.setText("CLIENTS LEDGER");
+        jPanel9.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 20, 240, -1));
 
         jTabbedPane1.addTab("CLIENTS LEDGER", jPanel9);
 
+        jPanel4.setBackground(new java.awt.Color(0, 51, 51));
         jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jScrollPane3.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+
+        jTable1.setBackground(new java.awt.Color(0, 51, 51));
+        jTable1.setForeground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Account No.", "Account Name", "Total Amount Due", "Payment Method"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane3.setViewportView(jTable1);
 
-        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(93, 78, 1050, -1));
+        jPanel4.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(131, 172, 713, 316));
+
+        jLabel22.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/WATERADMIN (1).jpg"))); // NOI18N
+        jPanel4.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 40, 1160, 640));
+
+        jLabel37.setFont(new java.awt.Font("MingLiU_HKSCS-ExtB", 1, 16)); // NOI18N
+        jLabel37.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel37.setText("SALES");
+        jPanel4.add(jLabel37, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 20, 240, -1));
 
         jTabbedPane1.addTab("SALES", jPanel4);
 
-        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 660));
+        getContentPane().add(jTabbedPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, -40, 1190, 730));
 
+        jPanel13.setBackground(new java.awt.Color(0, 51, 51));
+        jPanel13.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jButton3.setBackground(new java.awt.Color(0, 102, 102));
+        jButton3.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(255, 255, 255));
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/home (2).png"))); // NOI18N
+        jButton3.setText("DASHBOARD");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+
+        jButton4.setBackground(new java.awt.Color(0, 102, 102));
+        jButton4.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(255, 255, 255));
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/information (1).png"))); // NOI18N
+        jButton4.setText("SERVICE INFO");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 150, -1));
+
+        jButton5.setBackground(new java.awt.Color(0, 102, 102));
+        jButton5.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        jButton5.setForeground(new java.awt.Color(255, 255, 255));
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/magnifying-glass (1).png"))); // NOI18N
+        jButton5.setText("METER READING");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, -1, -1));
+
+        jButton6.setBackground(new java.awt.Color(0, 102, 102));
+        jButton6.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        jButton6.setForeground(new java.awt.Color(255, 255, 255));
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/detail (1).png"))); // NOI18N
+        jButton6.setText("BILLING DETAILS");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 170, -1));
+
+        jButton7.setBackground(new java.awt.Color(0, 102, 102));
+        jButton7.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        jButton7.setForeground(new java.awt.Color(255, 255, 255));
+        jButton7.setText("BILLING SUMMARY");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 330, -1, -1));
+
+        jButton8.setBackground(new java.awt.Color(0, 102, 102));
+        jButton8.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        jButton8.setForeground(new java.awt.Color(255, 255, 255));
+        jButton8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/receipt (1).png"))); // NOI18N
+        jButton8.setText("GENERATE RECEIPT");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 400, -1, -1));
+
+        jButton9.setBackground(new java.awt.Color(0, 102, 102));
+        jButton9.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        jButton9.setForeground(new java.awt.Color(255, 255, 255));
+        jButton9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/operation (1).png"))); // NOI18N
+        jButton9.setText("PAYMENT");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 440, -1, -1));
+
+        jButton10.setBackground(new java.awt.Color(0, 102, 102));
+        jButton10.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        jButton10.setForeground(new java.awt.Color(255, 255, 255));
+        jButton10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/ledgers (1).png"))); // NOI18N
+        jButton10.setText("CLIENT LEDGER");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(jButton10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 520, -1, -1));
+
+        jButton11.setBackground(new java.awt.Color(0, 102, 102));
+        jButton11.setFont(new java.awt.Font("Perpetua Titling MT", 0, 12)); // NOI18N
+        jButton11.setForeground(new java.awt.Color(255, 255, 255));
+        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/sales (1).png"))); // NOI18N
+        jButton11.setText("SALES");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+        jPanel13.add(jButton11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 560, 120, -1));
+
+        LogoutBT.setFont(new java.awt.Font("Georgia", 0, 12)); // NOI18N
+        LogoutBT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/waterbillingsystemrjc/logout (1).png"))); // NOI18N
         LogoutBT.setText("Log out");
         LogoutBT.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LogoutBTActionPerformed(evt);
             }
         });
-        getContentPane().add(LogoutBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 690, -1, -1));
+        jPanel13.add(LogoutBT, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 630, -1, -1));
+
+        getContentPane().add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 190, 690));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1717,14 +2176,15 @@ try {
         
         MRConsumptionTF.setText("");
     }
+        BDTaxAmountTF.requestFocus();
     }//GEN-LAST:event_MRConsumptionTFActionPerformed
 
     private void MRPreviousReadingTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRPreviousReadingTFActionPerformed
-      
+        MRCurrentReadingTF.requestFocus();
     }//GEN-LAST:event_MRPreviousReadingTFActionPerformed
 
     private void MRCurrentReadingTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MRCurrentReadingTFActionPerformed
-  
+        MRConsumptionTF.requestFocus();
     }//GEN-LAST:event_MRCurrentReadingTFActionPerformed
 
     private void BDAccountNoTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDAccountNoTFActionPerformed
@@ -1777,7 +2237,7 @@ try {
         
         BDBaseChargeTF.setText("");
     }
-    
+    BDPenaltyChargeTF.requestFocus();
     }//GEN-LAST:event_BDBaseChargeTFActionPerformed
 
     private void BDPenaltyChargeTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDPenaltyChargeTFActionPerformed
@@ -1807,6 +2267,7 @@ try {
         
         BDPenaltyChargeTF.setText("");
     }
+       BSBillingPeriodStartTF.requestFocus();
 }
     
     private boolean checkDueDateMissed() {
@@ -1825,6 +2286,8 @@ try {
         
         updateBillingPeriodEnd();
         updateDueDate();
+        
+        BSTotalAmountDueTF.requestFocus();
     }//GEN-LAST:event_BSBillingPeriodStartTFActionPerformed
 
     private void BSBillingPeriodEndTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BSBillingPeriodEndTFActionPerformed
@@ -1906,7 +2369,7 @@ try {
     }//GEN-LAST:event_SIPropertyCBActionPerformed
 
     private void BDTaxAmountTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BDTaxAmountTFActionPerformed
-       
+        BDBaseChargeTF.requestFocus();
     }//GEN-LAST:event_BDTaxAmountTFActionPerformed
 
     private void AccountStatusCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountStatusCBActionPerformed
@@ -2012,116 +2475,14 @@ try {
     }//GEN-LAST:event_BSAddToReceiptActionPerformed
 
     private void GRBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GRBTActionPerformed
-        try {
-        String startDateInput = GRBillingPeriodStartTF.getText().trim();
-        String endDateInput = GRBillingPeriodEndTF.getText().trim();
+    
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
-        dateFormat.setLenient(false); // Ensures strict date parsing
-        java.util.Date utilDateStart = dateFormat.parse(startDateInput);
-        java.util.Date utilDateEnd = dateFormat.parse(endDateInput);
 
-        java.sql.Date sqlDateStart = new java.sql.Date(utilDateStart.getTime());
-        java.sql.Date sqlDateEnd = new java.sql.Date(utilDateEnd.getTime());
-
-        String accountNo = GRAccountNoTF.getText();
-        if (GRReceipt.getText().contains("Account No.  : " + accountNo)) {
-            JOptionPane.showMessageDialog(null, "Account already added to the receipt area.", "Duplicate Entry", JOptionPane.WARNING_MESSAGE);
-            return; 
-        }
-
-        try (Connection conn = DBConnection.getConnection()) {
-            String checkAccountQuery = "SELECT COUNT(*) FROM generatedreceipt WHERE Account_No = ? AND Billing_Period_Start = ? AND Billing_Period_End = ? AND Due_Date = ?";
-
-            try (PreparedStatement preparedStatementCheck = conn.prepareStatement(checkAccountQuery)) {
-                preparedStatementCheck.setString(1, accountNo);
-                preparedStatementCheck.setDate(2, sqlDateStart);
-                preparedStatementCheck.setDate(3, sqlDateEnd);
-                preparedStatementCheck.setDate(4, sqlDateStart);
-
-                ResultSet rs = preparedStatementCheck.executeQuery();
-                if (rs.next() && rs.getInt(1) > 0) {
-                    JOptionPane.showMessageDialog(null, "Account with the same billing period and due date already exists in the database.", "Duplicate Entry", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
-
-                String sql = "INSERT INTO generatedreceipt "
-                           + "(Account_No, Account_Name, Service_Address, Property, Meter_No, Previous_Reading, Current_Reading, Consumption, Rate, Tax_Amount, Base_Charge, Penalty_Charge, Billing_Period_Start, Billing_Period_End, Due_Date, Total_Amount_Due) "
-                           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-                try (PreparedStatement preparedStatement = conn.prepareStatement(sql)) {
-                    String accountName = GRAccountNameTF.getText();
-                    String serviceAddress = GRServiceAddressTF.getText();
-                    String property = GRPropertyTF.getText();
-                    String meterNo = GRMeterNoTF.getText();
-                    BigDecimal previousReading = new BigDecimal(GRPreviousReadingTF.getText());
-                    BigDecimal currentReading = new BigDecimal(GRCurrentReadingTF.getText());
-                    BigDecimal consumption = new BigDecimal(GRConsumptionTF.getText());
-                    BigDecimal rate = new BigDecimal(GRRateTF.getText());
-                    BigDecimal taxAmount = new BigDecimal(GRTaxAmountTF.getText());
-                    BigDecimal baseCharge = new BigDecimal(GRBaseChargeTF.getText());
-                    BigDecimal penaltyCharge = new BigDecimal(GRPenaltyChargeTF.getText());
-                    java.sql.Date dueDate = new java.sql.Date(new java.util.Date().getTime()); 
-                    BigDecimal totalAmountDue = new BigDecimal(GRTotalAmountDueTF.getText());
-
-                    preparedStatement.setString(1, accountNo);
-                    preparedStatement.setString(2, accountName);
-                    preparedStatement.setString(3, serviceAddress);
-                    preparedStatement.setString(4, property);
-                    preparedStatement.setString(5, meterNo);
-                    preparedStatement.setBigDecimal(6, previousReading);
-                    preparedStatement.setBigDecimal(7, currentReading);
-                    preparedStatement.setBigDecimal(8, consumption);
-                    preparedStatement.setBigDecimal(9, rate);
-                    preparedStatement.setBigDecimal(10, taxAmount);
-                    preparedStatement.setBigDecimal(11, baseCharge);
-                    preparedStatement.setBigDecimal(12, penaltyCharge);
-                    preparedStatement.setDate(13, sqlDateStart);
-                    preparedStatement.setDate(14, sqlDateEnd);
-                    preparedStatement.setDate(15, dueDate);
-                    preparedStatement.setBigDecimal(16, totalAmountDue);
-
-                    int rowsInserted = preparedStatement.executeUpdate();
-                    if (rowsInserted > 0) {
-                        GRReceipt.setText(GRReceipt.getText() + "\n***************BILLING SUMMARY****************\n");
-                        GRReceipt.append("\nAccount No.  : " + GRAccountNoTF.getText());
-                        GRReceipt.append("\nAccount Name : " + GRAccountNameTF.getText());
-                        GRReceipt.append("\nService Area : " + GRServiceAddressTF.getText());
-                        GRReceipt.append("\nProperty     : " + GRPropertyTF.getText());
-                        GRReceipt.append("\nMeter No.    : " + GRMeterNoTF.getText());
-                        GRReceipt.append("\nPrevious Reading : " + GRPreviousReadingTF.getText());
-                        GRReceipt.append("\nCurrent Reading  : " + GRCurrentReadingTF.getText());
-                        GRReceipt.append("\nConsumption      : " + GRConsumptionTF.getText());
-                        GRReceipt.append("\nRate            : " + GRRateTF.getText());
-                        GRReceipt.append("\nTax             : " + GRTaxAmountTF.getText());
-                        GRReceipt.append("\nBase Charge     : " + GRBaseChargeTF.getText());
-                        GRReceipt.append("\nPenalty Charge  : " + GRPenaltyChargeTF.getText());
-                        GRReceipt.append("\nBilling Period Start : " + GRBillingPeriodStartTF.getText());
-                        GRReceipt.append("\nBilling Period End   : " + GRBillingPeriodEndTF.getText());
-                        GRReceipt.append("\nDue Date            : " + GRDueDateTF.getText());
-                        GRReceipt.append("\nTotal Amount Due     : " + GRTotalAmountDueTF.getText());
-
-                       
-                        JOptionPane.showMessageDialog(null, "Receipt has been successfully sent to the client.", "Receipt Sent", JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Failed to generate receipt.");
-                    }
-                }
-            }
-        }
-    } catch (ParseException ex) {
-        JOptionPane.showMessageDialog(null, "Invalid date format. Please use MM/dd/yyyy.", "Error", JOptionPane.ERROR_MESSAGE);
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(null, "Database error: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        ex.printStackTrace();
-    } catch (Exception ex) {
-        JOptionPane.showMessageDialog(null, "An unexpected error occurred: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        ex.printStackTrace();
-    }
 
 
     }//GEN-LAST:event_GRBTActionPerformed
 
+    
     private void LogoutBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutBTActionPerformed
         int response = JOptionPane.showConfirmDialog(
              null,
@@ -2225,6 +2586,71 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_PaymentMethodCBActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(0);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(1);
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(3);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(5);
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(7);
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(2);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(4);
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(6);
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+        jTabbedPane1.setSelectedIndex(8);
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void DisplayClientsBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DisplayClientsBTActionPerformed
+
+    
+    }//GEN-LAST:event_DisplayClientsBTActionPerformed
+
+    private void CLSearchBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CLSearchBTActionPerformed
+    
+    }//GEN-LAST:event_CLSearchBTActionPerformed
+
+    private void CLDeleteBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CLDeleteBTActionPerformed
+                                                  
+    
+    }//GEN-LAST:event_CLDeleteBTActionPerformed
+
+    private void CLDeleteAllBTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CLDeleteAllBTActionPerformed
+       
+    
+
+    }//GEN-LAST:event_CLDeleteAllBTActionPerformed
+
     public static void main(String args[]) {
 
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -2275,10 +2701,16 @@ try {
     private javax.swing.JTextField BSBillingPeriodStartTF;
     private javax.swing.JTextField BSDueDateTF;
     private javax.swing.JTextField BSTotalAmountDueTF;
+    private javax.swing.JButton CLDeleteAllBT;
+    private javax.swing.JButton CLDeleteBT;
+    private javax.swing.JButton CLSearchBT;
+    private javax.swing.JTextField CLSearchTF;
+    private javax.swing.JTable CLTable;
     private javax.swing.JTextField ContactNumberTF;
     private javax.swing.JButton CreateBT;
     private javax.swing.JTable CustomerInfoTable;
     private javax.swing.JButton DeleteBT;
+    private javax.swing.JButton DisplayClientsBT;
     private javax.swing.JTextField GRAccountNameTF;
     private javax.swing.JTextField GRAccountNoTF;
     private javax.swing.JButton GRBT;
@@ -2319,19 +2751,43 @@ try {
     private javax.swing.JButton SearchBT;
     private javax.swing.JButton UpdateBT;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel34;
+    private javax.swing.JLabel jLabel35;
     private javax.swing.JLabel jLabel36;
+    private javax.swing.JLabel jLabel37;
     private javax.swing.JLabel jLabel39;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel40;
@@ -2374,7 +2830,10 @@ try {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2392,6 +2851,5 @@ try {
     private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }
